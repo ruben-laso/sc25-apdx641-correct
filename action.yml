@@ -20,7 +20,7 @@ inputs:
     description: Task input kwargs specified as a dictionary of kwargs
     default: '{}'
 outputs:
-  result:
+  output:
     description: Task execution result
 runs:
   using: 'node20'

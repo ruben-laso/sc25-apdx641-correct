@@ -27407,7 +27407,7 @@ async function run() {
         const task_uuid = batch_res.tasks[keys][0];
         const result = await check_status(token.access_token, task_uuid);
         console.log(result);
-        coreExports.setOutput('result', result.result);
+        coreExports.setOutput('output', result);
     }
     catch (error) {
         coreExports.setFailed(error);

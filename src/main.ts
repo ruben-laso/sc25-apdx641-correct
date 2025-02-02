@@ -29,7 +29,7 @@ export async function run(): Promise<void> {
     const task_uuid: string = batch_res.tasks[keys as keyof object][0]
     const result = await check_status(token.access_token, task_uuid)
     console.log(result)
-    core.setOutput('result', result.result)
+    core.setOutput('output', result)
   } catch (error) {
     core.setFailed(error as Error)
   }

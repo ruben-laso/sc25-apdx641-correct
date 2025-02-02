@@ -19,6 +19,14 @@ jest.unstable_mockModule('../src/functions.js', () => gcf)
 // mocks are used in place of any actual dependencies.
 const { run } = await import('../src/main.js')
 
+const output = {
+  task_id: 't1',
+  status: 'waiting-for-ep',
+  result: 'res',
+  completion_t: '1',
+  exception: 'ex',
+  details: {}
+}
 describe('main.ts', () => {
   beforeEach(() => {
     // Set the action's inputs as return values from core.getInput().
@@ -57,16 +65,7 @@ describe('main.ts', () => {
       })
     )
 
-    gcf.check_status.mockImplementation(() =>
-      Promise.resolve({
-        task_id: 't1',
-        status: 'waiting-for-ep',
-        result: 'res',
-        completion_t: '1',
-        exception: 'ex',
-        details: {}
-      })
-    )
+    gcf.check_status.mockImplementation(() => Promise.resolve(output))
 
     // Mock the wait function so that it does not actually wait.
     wait.mockImplementation(() => Promise.resolve('done!'))
@@ -78,7 +77,7 @@ describe('main.ts', () => {
 
   it('Check that main function runs with inputs', async () => {
     await run()
-    expect(core.setOutput).toHaveBeenCalledWith('result', 'res')
+    expect(core.setOutput).toHaveBeenCalledWith('output', output)
   })
 
   it('Unset getToken mock', async () => {
