@@ -27287,7 +27287,6 @@ function getToken(CLIENT_ID, CLIENT_SECRET) {
     });
     return fetch(request)
         .then((res) => {
-        console.log(token_fmt);
         if (res.ok) {
             return res.json();
         }
