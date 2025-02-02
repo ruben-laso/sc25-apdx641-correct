@@ -1,16 +1,16 @@
 name: 'Globus Compute Action'
 description: 'Execute function on endpoint with provided task inputs.'
 inputs:
-  client-id:
+  client_id:
     description: Globus Client ID to use
     required: true
-  client-secret:
+  client_secret:
     description: Globus Client secret to use
     required: true
-  endpoint-uuid:
+  endpoint_uuid:
     description: Globus Compute endpoint UUID to run tasks on
     required: true
-  function-uuid:
+  function_uuid:
     description: Function UUID to run on endpoint
     required: true
   args:
