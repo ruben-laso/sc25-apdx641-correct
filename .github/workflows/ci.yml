@@ -57,8 +57,12 @@ jobs:
         id: test-action
         uses: ./
         with:
-          milliseconds: 2000
-
+          client-id: ${{ secrets.GLOBUS_CLI_CLIENT_ID }}
+          client-secret: ${{ secrets.GLOBUS_CLI_CLIENT_SECRET }}
+          endpoint-uuid: "f8e95115-0d66-41fe-88d8-ecf8c3bf59fd"
+          function-uuid: "02ea7614-be2e-4df0-9d23-643b6d8a6499"
+          args: "[]"
+          kwargs: '{"inpt": "test"}'
       - name: Print Output
         id: output
-        run: echo "${{ steps.test-action.outputs.time }}"
+        run: echo "${{ steps.test-action.outputs.result }}"
