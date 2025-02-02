@@ -55,7 +55,7 @@ jobs:
 
       - name: Test Local Action
         id: test-action
-        uses: ./dist
+        uses: ./
         with:
           client-id: ${{ secrets.GLOBUS_CLI_CLIENT_ID }}
           client-secret: ${{ secrets.GLOBUS_CLI_CLIENT_SECRET }}
