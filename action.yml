@@ -1,24 +1,27 @@
-name: The name of your action here
-description: Provide a description here
-author: Your name or organization here
-
-# Add your action's branding here. This will appear on the GitHub Marketplace.
-branding:
-  icon: heart
-  color: red
-
-# Define your inputs here.
+name: 'Globus Compute Action'
+description: 'Execute function on endpoint with provided task inputs.'
 inputs:
-  milliseconds:
-    description: Your input description here
+  client-id:
+    description: Globus Client ID to use
     required: true
-    default: '1000'
-
-# Define your outputs here.
+  client-secret:
+    description: Globus Client secret to use
+    required: true
+  endpoint-uuid:
+    description: Globus Compute endpoint UUID to run tasks on
+    required: true
+  function-uuid:
+    description: Function UUID to run on endpoint
+    required: true
+  args:
+    description: Task input args specified as list of arguments
+    default: '[]'
+  kwargs:
+    description: Task input kwargs specified as a dictionary of kwargs
+    default: '{}'
 outputs:
-  time:
-    description: Your output description here
-
+  result:
+    description: Task execution result
 runs:
-  using: node20
-  main: dist/index.js
+  using: 'node20'
+  main: 'index.js'
