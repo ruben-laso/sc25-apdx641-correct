@@ -1,162 +1,96 @@
-# Create a GitHub Action Using TypeScript
+# Globus Compute GitHub Action
 
-[![GitHub Super-Linter](https://github.com/actions/typescript-action/actions/workflows/linter.yml/badge.svg)](https://github.com/super-linter/super-linter)
-![CI](https://github.com/actions/typescript-action/actions/workflows/ci.yml/badge.svg)
-[![Check dist/](https://github.com/actions/typescript-action/actions/workflows/check-dist.yml/badge.svg)](https://github.com/actions/typescript-action/actions/workflows/check-dist.yml)
-[![CodeQL](https://github.com/actions/typescript-action/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/actions/typescript-action/actions/workflows/codeql-analysis.yml)
+[![GitHub Super-Linter](https://github.com/ValHayot/globus-compute-github-action/actions/workflows/linter.yml/badge.svg)](https://github.com/ValHayot/globus-compute-github-action/actions/workflows/linter.yml)
+[![CI](https://github.com/ValHayot/globus-compute-github-action/actions/workflows/ci.yml/badge.svg)](https://github.com/ValHayot/globus-compute-github-action/actions/workflows/ci.yml)
+[![Check dist/](https://github.com/ValHayot/globus-compute-github-action/actions/workflows/check-dist.yml/badge.svg)](https://github.com/ValHayot/globus-compute-github-action/actions/workflows/check-dist.yml)
+[![CodeQL](https://github.com/ValHayot/globus-compute-github-action/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/ValHayot/globus-compute-github-action/actions/workflows/codeql-analysis.yml)
 [![Coverage](./badges/coverage.svg)](./badges/coverage.svg)
 
-Use this template to bootstrap the creation of a TypeScript action. :rocket:
+> [!WARNING]
+> Action is under active development.
 
-This template includes compilation support, tests, a validation workflow,
-publishing, and versioning guidance.
+## Introduction
 
-If you are new, there's also a simpler introduction in the
-[Hello world JavaScript action repository](https://github.com/actions/hello-world-javascript-action).
+This action aims to allow users to execute their jobs (and by extension, CI flows) on [Globus Compute](https://globus-compute.readthedocs.io/en/stable/sdk.html) Endpoints within their GitHub Action workflows. 
 
-## Create Your Own Action
+Users are responsible for setting up their own Globus Compute Endpoints that will be used by the action. Furthermore, to bypass manual authentication within the action, it is necessary that the endpoints and the action are both configured to use a `GLOBUS_COMPUTE_CLIENT_ID` and `GLOBUS_COMPUTE_CLIENT_SECRET` ([docs](https://globus-compute.readthedocs.io/en/stable/sdk.html#client-credentials-with-clients)).
 
-To create your own action, you can use this repository as a template! Just
-follow the below instructions:
+## Usage
 
-1. Click the **Use this template** button at the top of the repository
-1. Select **Create a new repository**
-1. Select an owner and name for your new repository
-1. Click **Create repository**
-1. Clone your new repository
+> [!Caution]
+> Not currently published to the action marketplace.
 
-> [!IMPORTANT]
->
-> Make sure to remove or update the [`CODEOWNERS`](./CODEOWNERS) file! For
-> details on how to use this file, see
-> [About code owners](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners).
+Using the action in a workflow can be done by adding the following step.
 
-## Initial Setup
+```yaml
+  - name: Run task on Globus Compute Endpoint
+    id: gc-action
+    uses: actions/globus-compute-action@v1 
+    with:
+      client_id: ${{ secret.GLOBUS_COMPUTE_CLIENT_ID }}
+      client_secret: ${{ secret.GLOBUS_COMPUTE_CLIENT_SECRET }}
+      endpoint_uuid: <Globus Compute Endpoint UUID>
+      function_uuid: <Registered Globus Compute function UUID>
+      args: <List of arguments to pass to task>
+      kwargs: <Dictionary of keyword arguments>
+```
 
-After you've cloned the repository to your local machine or codespace, you'll
-need to perform some initial setup steps before you can develop your action.
+### Example
 
-> [!NOTE]
->
-> You'll need to have a reasonably modern version of
-> [Node.js](https://nodejs.org) handy (20.x or later should work!). If you are
-> using a version manager like [`nodenv`](https://github.com/nodenv/nodenv) or
-> [`fnm`](https://github.com/Schniz/fnm), this template has a `.node-version`
-> file at the root of the repository that can be used to automatically switch to
-> the correct version when you `cd` into the repository. Additionally, this
-> `.node-version` file is used by GitHub Actions in any `actions/setup-node`
-> actions.
+```yaml
+ - name: Run GC Action
+        id: gc-action
+        uses: actions/globus-compute-action@v1
+        with:
+          client_id: ${{ secrets.GLOBUS_COMPUTE_CLIENT_ID }}
+          client_secret: ${{ secrets.GLOBUS_COMPUTE_CLIENT_SECRET }}
+          endpoint_uuid: 'f8e95115-0d66-41fe-88d8-ecf8c3bf59fd'
+          function_uuid: '02ea7614-be2e-4df0-9d23-643b6d8a6499'
+          args: '[]'
+          kwargs: '{"inpt": "test"}'
+```
 
-1. :hammer_and_wrench: Install the dependencies
+### Obtaining task execution outputs
+The output of the execution of a GC task is returned as a JSON dictionary via the `steps.<step_id>.outputs.output` variable. For example, a job defined as follows:
 
-   ```bash
-   npm install
-   ```
+```yaml
+      - name: Run GC Action
+        id: gc-action
+        uses: actions/globus-compute-action@v1
+        with:
+          client_id: ${{ secrets.GLOBUS_CLI_CLIENT_ID }}
+          client_secret: ${{ secrets.GLOBUS_CLI_CLIENT_SECRET }}
+          endpoint_uuid: 'f8e95115-0d66-41fe-88d8-ecf8c3bf59fd'
+          function_uuid: '02ea7614-be2e-4df0-9d23-643b6d8a6499'
+          args: '[]'
+          kwargs: '{"inpt": "test"}'
+      - name: Print Output
+        id: output
+        run: echo "${{ steps.gc-action.outputs.output }}"
+```
 
-1. :building_construction: Package the TypeScript for distribution
-
-   ```bash
-   npm run bundle
-   ```
-
-1. :white_check_mark: Run the tests
-
-   ```bash
-   $ npm test
-
-   PASS  ./index.test.js
-     ✓ throws invalid number (3ms)
-     ✓ wait 500 ms (504ms)
-     ✓ test runs (95ms)
-
-   ...
-   ```
-
-## Update the Action Metadata
-
-The [`action.yml`](action.yml) file defines metadata about your action, such as
-input(s) and output(s). For details about this file, see
-[Metadata syntax for GitHub Actions](https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions).
-
-When you copy this repository, update `action.yml` with the name, description,
-inputs, and outputs for your action.
-
-## Update the Action Code
-
-The [`src/`](./src/) directory is the heart of your action! This contains the
-source code that will be run when your action is invoked. You can replace the
-contents of this directory with your own code.
-
-There are a few things to keep in mind when writing your action code:
-
-- Most GitHub Actions toolkit and CI/CD operations are processed asynchronously.
-  In `main.ts`, you will see that the action is run in an `async` function.
-
-  ```javascript
-  import * as core from '@actions/core'
-  //...
-
-  async function run() {
-    try {
-      //...
-    } catch (error) {
-      core.setFailed(error.message)
+May return the following output:
+```bash
+{
+  task_id: '35363d35-a3a9-4db7-bc46-4a8d92941188',
+  status: 'success',
+  result: '00\ngASVEwAAAAAAAAB9lIwEaW5wdJSMBXdvcmxklHMu\n',
+  completion_t: '1738514959.424744',
+  details: {
+    os: 'macOS-15.0.1-arm64-arm-64bit',
+    dill_version: '0.3.9',
+    python_version: '3.12.0',
+    globus_compute_sdk_version: '3.0.1',
+    endpoint_id: 'f8e95115-0d66-41fe-88d8-ecf8c3bf59fd',
+    task_transitions: {
+      'execution-start': 1738514959.122622,
+      'execution-end': 1738514959.14045
     }
   }
-  ```
+}
+```
 
-  For more information about the GitHub Actions toolkit, see the
-  [documentation](https://github.com/actions/toolkit/blob/master/README.md).
-
-So, what are you waiting for? Go ahead and start customizing your action!
-
-1. Create a new branch
-
-   ```bash
-   git checkout -b releases/v1
-   ```
-
-1. Replace the contents of `src/` with your action code
-1. Add tests to `__tests__/` for your source code
-1. Format, test, and build the action
-
-   ```bash
-   npm run all
-   ```
-
-   > This step is important! It will run [`rollup`](https://rollupjs.org/) to
-   > build the final JavaScript action code with all dependencies included. If
-   > you do not run this step, your action will not work correctly when it is
-   > used in a workflow.
-
-1. (Optional) Test your action locally
-
-   The [`@github/local-action`](https://github.com/github/local-action) utility
-   can be used to test your action locally. It is a simple command-line tool
-   that "stubs" (or simulates) the GitHub Actions Toolkit. This way, you can run
-   your TypeScript action locally without having to commit and push your changes
-   to a repository.
-
-   The `local-action` utility can be run in the following ways:
-
-   - Visual Studio Code Debugger
-
-     Make sure to review and, if needed, update
-     [`.vscode/launch.json`](./.vscode/launch.json)
-
-   - Terminal/Command Prompt
-
-     ```bash
-     # npx local action <action-yaml-path> <entrypoint> <dotenv-file>
-     npx local-action . src/main.ts .env
-     ```
-
-   You can provide a `.env` file to the `local-action` CLI to set environment
-   variables used by the GitHub Actions Toolkit. For example, setting inputs and
-   event payload data used by your action. For more information, see the example
-   file, [`.env.example`](./.env.example), and the
-   [GitHub Actions Documentation](https://docs.github.com/en/actions/learn-github-actions/variables#default-environment-variables).
-
+<!-- 
 1. Commit your changes
 
    ```bash
@@ -258,4 +192,4 @@ following steps:
 1. **Pushing changes to remote:** Finally, the script pushes the necessary
    commits, tags and branches to the remote repository. From here, you will need
    to create a new release in GitHub so users can easily reference the new tags
-   in their workflows.
+   in their workflows. -->
