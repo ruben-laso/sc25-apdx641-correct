@@ -6,7 +6,8 @@
 [![CodeQL](https://github.com/ValHayot/globus-compute-github-action/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/ValHayot/globus-compute-github-action/actions/workflows/codeql-analysis.yml)
 [![Coverage](./badges/coverage.svg)](./badges/coverage.svg)
 
-> [!WARNING] Action is under active development.
+> [!WARNING]
+> Action is under active development.
 
 ## Introduction
 
@@ -24,7 +25,8 @@ configured to use a `GLOBUS_COMPUTE_CLIENT_ID` and
 
 ## Usage
 
-> [!Caution] Not currently published to the action marketplace.
+> [!CAUTION]
+> Not currently published to the action marketplace.
 
 Using the action in a workflow can be done by adding the following step.
 
