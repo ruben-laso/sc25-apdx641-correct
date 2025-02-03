@@ -27,7 +27,7 @@ configured to use a `GLOBUS_COMPUTE_CLIENT_ID` and
 ## Usage
 
 > [!CAUTION]
-> 
+>
 > Not currently published to the action marketplace.
 
 Using the action in a workflow can be done by adding the following step.
