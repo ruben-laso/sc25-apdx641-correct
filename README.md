@@ -6,33 +6,39 @@
 [![CodeQL](https://github.com/ValHayot/globus-compute-github-action/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/ValHayot/globus-compute-github-action/actions/workflows/codeql-analysis.yml)
 [![Coverage](./badges/coverage.svg)](./badges/coverage.svg)
 
-> [!WARNING]
-> Action is under active development.
+> [!WARNING] Action is under active development.
 
 ## Introduction
 
-This action aims to allow users to execute their jobs (and by extension, CI flows) on [Globus Compute](https://globus-compute.readthedocs.io/en/stable/sdk.html) Endpoints within their GitHub Action workflows. 
+This action aims to allow users to execute their jobs (and by extension, CI
+flows) on
+[Globus Compute](https://globus-compute.readthedocs.io/en/stable/sdk.html)
+Endpoints within their GitHub Action workflows.
 
-Users are responsible for setting up their own Globus Compute Endpoints that will be used by the action. Furthermore, to bypass manual authentication within the action, it is necessary that the endpoints and the action are both configured to use a `GLOBUS_COMPUTE_CLIENT_ID` and `GLOBUS_COMPUTE_CLIENT_SECRET` ([docs](https://globus-compute.readthedocs.io/en/stable/sdk.html#client-credentials-with-clients)).
+Users are responsible for setting up their own Globus Compute Endpoints that
+will be used by the action. Furthermore, to bypass manual authentication within
+the action, it is necessary that the endpoints and the action are both
+configured to use a `GLOBUS_COMPUTE_CLIENT_ID` and
+`GLOBUS_COMPUTE_CLIENT_SECRET`
+([docs](https://globus-compute.readthedocs.io/en/stable/sdk.html#client-credentials-with-clients)).
 
 ## Usage
 
-> [!Caution]
-> Not currently published to the action marketplace.
+> [!Caution] Not currently published to the action marketplace.
 
 Using the action in a workflow can be done by adding the following step.
 
 ```yaml
-  - name: Run task on Globus Compute Endpoint
-    id: gc-action
-    uses: actions/globus-compute-action@v1 
-    with:
-      client_id: ${{ secret.GLOBUS_COMPUTE_CLIENT_ID }}
-      client_secret: ${{ secret.GLOBUS_COMPUTE_CLIENT_SECRET }}
-      endpoint_uuid: <Globus Compute Endpoint UUID>
-      function_uuid: <Registered Globus Compute function UUID>
-      args: <List of arguments to pass to task>
-      kwargs: <Dictionary of keyword arguments>
+- name: Run task on Globus Compute Endpoint
+  id: gc-action
+  uses: actions/globus-compute-action@v1
+  with:
+    client_id: ${{ secret.GLOBUS_COMPUTE_CLIENT_ID }}
+    client_secret: ${{ secret.GLOBUS_COMPUTE_CLIENT_SECRET }}
+    endpoint_uuid: <Globus Compute Endpoint UUID>
+    function_uuid: <Registered Globus Compute function UUID>
+    args: <List of arguments to pass to task>
+    kwargs: <Dictionary of keyword arguments>
 ```
 
 ### Example
@@ -51,25 +57,29 @@ Using the action in a workflow can be done by adding the following step.
 ```
 
 ### Obtaining task execution outputs
-The output of the execution of a GC task is returned as a JSON dictionary via the `steps.<step_id>.outputs.output` variable. For example, a job defined as follows:
+
+The output of the execution of a GC task is returned as a JSON dictionary via
+the `steps.<step_id>.outputs.output` variable. For example, a job defined as
+follows:
 
 ```yaml
-      - name: Run GC Action
-        id: gc-action
-        uses: actions/globus-compute-action@v1
-        with:
-          client_id: ${{ secrets.GLOBUS_CLI_CLIENT_ID }}
-          client_secret: ${{ secrets.GLOBUS_CLI_CLIENT_SECRET }}
-          endpoint_uuid: 'f8e95115-0d66-41fe-88d8-ecf8c3bf59fd'
-          function_uuid: '02ea7614-be2e-4df0-9d23-643b6d8a6499'
-          args: '[]'
-          kwargs: '{"inpt": "test"}'
-      - name: Print Output
-        id: output
-        run: echo "${{ steps.gc-action.outputs.output }}"
+- name: Run GC Action
+  id: gc-action
+  uses: actions/globus-compute-action@v1
+  with:
+    client_id: ${{ secrets.GLOBUS_CLI_CLIENT_ID }}
+    client_secret: ${{ secrets.GLOBUS_CLI_CLIENT_SECRET }}
+    endpoint_uuid: 'f8e95115-0d66-41fe-88d8-ecf8c3bf59fd'
+    function_uuid: '02ea7614-be2e-4df0-9d23-643b6d8a6499'
+    args: '[]'
+    kwargs: '{"inpt": "test"}'
+- name: Print Output
+  id: output
+  run: echo "${{ steps.gc-action.outputs.output }}"
 ```
 
 May return the following output:
+
 ```bash
 {
   task_id: '35363d35-a3a9-4db7-bc46-4a8d92941188',
@@ -90,7 +100,7 @@ May return the following output:
 }
 ```
 
-<!-- 
+<!--
 1. Commit your changes
 
    ```bash
