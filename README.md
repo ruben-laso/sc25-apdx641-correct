@@ -47,15 +47,15 @@ Using the action in a workflow can be done by adding the following step.
 
 ```yaml
  - name: Run GC Action
-        id: gc-action
-        uses: actions/globus-compute-action@v1
-        with:
-          client_id: ${{ secrets.GLOBUS_COMPUTE_CLIENT_ID }}
-          client_secret: ${{ secrets.GLOBUS_COMPUTE_CLIENT_SECRET }}
-          endpoint_uuid: 'f8e95115-0d66-41fe-88d8-ecf8c3bf59fd'
-          function_uuid: '02ea7614-be2e-4df0-9d23-643b6d8a6499'
-          args: '[]'
-          kwargs: '{"inpt": "test"}'
+   id: gc-action
+   uses: actions/globus-compute-action@v1
+   with:
+     client_id: ${{ secrets.GLOBUS_COMPUTE_CLIENT_ID }}
+     client_secret: ${{ secrets.GLOBUS_COMPUTE_CLIENT_SECRET }}
+     endpoint_uuid: 'f8e95115-0d66-41fe-88d8-ecf8c3bf59fd'
+     function_uuid: '02ea7614-be2e-4df0-9d23-643b6d8a6499'
+     args: '[]'
+     kwargs: '{"inpt": "test"}'
 ```
 
 ### Obtaining task execution outputs
