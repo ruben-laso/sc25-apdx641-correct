@@ -27324,17 +27324,17 @@ function submit_tasks(access_token, endpoint_uuid, function_uuid, args, kwargs, 
     else if (!validate(function_uuid)) {
         throw new Error(`Function UUID ${function_uuid} is not a valid UUID`);
     }
+    // configure inputs to be Globus Compute JSONData or accept serialized kwargs
     let serde_args;
+    const JSONDataSerdeID = '11';
+    const a = `${JSONDataSerdeID}\n${args}`;
     if (serialized.length > 0) {
-        serde_args = serialized;
+        serde_args = `${a.length}\n${a}${serialized}`;
     }
     else {
         // check if args and kwargs are valid JSON
         JSON.parse(args);
         JSON.parse(kwargs);
-        // configure inputs to be Globus Compute JSONData
-        const JSONDataSerdeID = '11';
-        const a = `${JSONDataSerdeID}\n${args}`;
         const k = `${JSONDataSerdeID}\n${kwargs}`;
         serde_args = `${a.length}\n${a}${k.length}\n${k}`;
     }
