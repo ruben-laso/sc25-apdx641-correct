@@ -89,12 +89,24 @@ describe('functions.ts', () => {
       } as Response)
     )
 
-    const sub_response = await submit_tasks(
+    let sub_response = await submit_tasks(
       'a111',
       endpoint_uuid,
       function_uuid,
       '[]',
-      '{}'
+      '{}',
+      ''
+    )
+    expect(sub_response).toBe(ValidTaskSubmissionResponse)
+
+    // add serialized args and test for coverage here
+    sub_response = await submit_tasks(
+      'a111',
+      endpoint_uuid,
+      function_uuid,
+      '[]',
+      '{}',
+      '12456'
     )
     expect(sub_response).toBe(ValidTaskSubmissionResponse)
   })
@@ -110,7 +122,7 @@ describe('functions.ts', () => {
 
     let err
     try {
-      await submit_tasks('a111', 'eid2', 'func_id', '[]', '{}')
+      await submit_tasks('a111', 'eid2', 'func_id', '[]', '{}', '')
     } catch (error) {
       err = error
     }
@@ -123,7 +135,8 @@ describe('functions.ts', () => {
         ValidTaskSubmissionResponse.endpoint_id,
         'func_id',
         '[]',
-        '{}'
+        '{}',
+        ''
       )
     } catch (error) {
       err = error
@@ -136,7 +149,8 @@ describe('functions.ts', () => {
         ValidTaskSubmissionResponse.endpoint_id,
         function_uuid,
         '[]',
-        '{}'
+        '{}',
+        ''
       )
     } catch (error) {
       err = error

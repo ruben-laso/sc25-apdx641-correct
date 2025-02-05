@@ -27316,7 +27316,7 @@ function getToken(CLIENT_ID, CLIENT_SECRET) {
  * @returns Task submission response returned by Globus Compute
  *
  */
-function submit_tasks(access_token, endpoint_uuid, function_uuid, args, kwargs) {
+function submit_tasks(access_token, endpoint_uuid, function_uuid, args, kwargs, serialized) {
     // checking if valid type
     if (!validate(endpoint_uuid)) {
         throw new Error(`Endpoint UUID ${endpoint_uuid} is not a valid UUID`);
@@ -27324,14 +27324,20 @@ function submit_tasks(access_token, endpoint_uuid, function_uuid, args, kwargs) 
     else if (!validate(function_uuid)) {
         throw new Error(`Function UUID ${function_uuid} is not a valid UUID`);
     }
-    // check if args and kwargs are valid JSON
-    JSON.parse(args);
-    JSON.parse(kwargs);
-    // configure inputs to be Globus Compute JSONData
-    const JSONDataSerdeID = '11';
-    const a = `${JSONDataSerdeID}\n${args}`;
-    const k = `${JSONDataSerdeID}\n${kwargs}`;
-    const serde_args = `${a.length}\n${a}${k.length}\n${k}`;
+    let serde_args;
+    if (serialized.length > 0) {
+        serde_args = serialized;
+    }
+    else {
+        // check if args and kwargs are valid JSON
+        JSON.parse(args);
+        JSON.parse(kwargs);
+        // configure inputs to be Globus Compute JSONData
+        const JSONDataSerdeID = '11';
+        const a = `${JSONDataSerdeID}\n${args}`;
+        const k = `${JSONDataSerdeID}\n${kwargs}`;
+        serde_args = `${a.length}\n${a}${k.length}\n${k}`;
+    }
     const headers = new Headers();
     headers.set('Content-Type', 'application/json');
     headers.set('Authorization', `Bearer ${access_token}`);
@@ -27418,8 +27424,9 @@ async function run() {
         const function_uuid = coreExports.getInput('function_uuid');
         const args = coreExports.getInput('args');
         const kwargs = coreExports.getInput('kwargs');
+        const serialized = coreExports.getInput('serialized');
         const token = await getToken(CLIENT_ID, CLIENT_SECRET);
-        const batch_res = await submit_tasks(token.access_token, endpoint_uuid, function_uuid, args, kwargs);
+        const batch_res = await submit_tasks(token.access_token, endpoint_uuid, function_uuid, args, kwargs, serialized);
         const keys = Object.keys(batch_res.tasks)[0];
         const task_uuid = batch_res.tasks[keys][0];
         const result = await check_status(token.access_token, task_uuid);

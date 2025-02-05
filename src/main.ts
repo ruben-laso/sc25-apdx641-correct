@@ -16,6 +16,7 @@ export async function run(): Promise<void> {
 
     const args: string = core.getInput('args')
     const kwargs: string = core.getInput('kwargs')
+    const serialized: string = core.getInput('serialized')
 
     const token: Token = await getToken(CLIENT_ID, CLIENT_SECRET)
     const batch_res = await submit_tasks(
@@ -23,7 +24,8 @@ export async function run(): Promise<void> {
       endpoint_uuid,
       function_uuid,
       args,
-      kwargs
+      kwargs,
+      serialized
     )
     const keys: string = Object.keys(batch_res.tasks)[0]
     const task_uuid: string = batch_res.tasks[keys as keyof object][0]
