@@ -1,4 +1,5 @@
 import { jest } from '@jest/globals'
+import { v4 as uuidv4 } from 'uuid'
 import { wait } from '../__fixtures__/wait.js'
 import { getToken, submit_tasks, check_status } from '../src/functions.js'
 import { TaskStatusResponse, TaskSubmission, Token } from '../src/interfaces.js'
@@ -14,7 +15,7 @@ const TokenResponse: Token = {
   other_tokens: []
 }
 
-const TaskSubmissionResponse: TaskSubmission = {
+const InvalidTaskSubmissionResponse: TaskSubmission = {
   request_id: 'r111',
   task_group_id: 'tgi-456',
   endpoint_id: 'eid-2',
@@ -39,6 +40,15 @@ describe('functions.ts', () => {
   afterEach(() => {
     jest.restoreAllMocks()
   })
+
+  const endpoint_uuid = uuidv4()
+  const function_uuid = uuidv4()
+  const ValidTaskSubmissionResponse: TaskSubmission = {
+    request_id: 'r111',
+    task_group_id: 'tgi-456',
+    endpoint_id: endpoint_uuid,
+    tasks: { function_uuid: ['task1', 'task2'] }
+  }
 
   it('successful call getToken', async () => {
     jest.spyOn(global, 'fetch').mockImplementation(() =>
@@ -74,25 +84,26 @@ describe('functions.ts', () => {
     jest.spyOn(global, 'fetch').mockImplementation(() =>
       Promise.resolve({
         ok: true,
-        json: () => Promise.resolve(TaskSubmissionResponse),
+        json: () => Promise.resolve(ValidTaskSubmissionResponse),
         text: () => Promise.resolve('Success')
       } as Response)
     )
 
     const sub_response = await submit_tasks(
       'a111',
-      'eid2',
-      'func_id',
+      endpoint_uuid,
+      function_uuid,
       '[]',
       '{}'
     )
-    expect(sub_response).toBe(TaskSubmissionResponse)
+    expect(sub_response).toBe(ValidTaskSubmissionResponse)
   })
   it('Failed call to submit_tasks', async () => {
+    const endpointFailedText = 'Endpoint UUID eid2 is not a valid UUID'
     jest.spyOn(global, 'fetch').mockImplementation(() =>
       Promise.resolve({
         ok: false,
-        json: () => Promise.resolve(TaskSubmissionResponse),
+        json: () => Promise.resolve(InvalidTaskSubmissionResponse),
         text: () => Promise.resolve(failedText)
       } as Response)
     )
@@ -100,6 +111,33 @@ describe('functions.ts', () => {
     let err
     try {
       await submit_tasks('a111', 'eid2', 'func_id', '[]', '{}')
+    } catch (error) {
+      err = error
+    }
+    expect(err).toStrictEqual(Error(endpointFailedText))
+
+    const functionFailedText = 'Function UUID func_id is not a valid UUID'
+    try {
+      await submit_tasks(
+        'a111',
+        ValidTaskSubmissionResponse.endpoint_id,
+        'func_id',
+        '[]',
+        '{}'
+      )
+    } catch (error) {
+      err = error
+    }
+    expect(err).toStrictEqual(Error(functionFailedText))
+
+    try {
+      await submit_tasks(
+        'a111',
+        ValidTaskSubmissionResponse.endpoint_id,
+        function_uuid,
+        '[]',
+        '{}'
+      )
     } catch (error) {
       err = error
     }
@@ -118,6 +156,7 @@ describe('functions.ts', () => {
     const status_response = await check_status('at01', 'tu123')
     expect(status_response).toBe(StatusResponse)
   })
+
   it('Failed call to check_status', async () => {
     jest.spyOn(global, 'fetch').mockImplementation(() =>
       Promise.resolve({
@@ -154,7 +193,7 @@ describe('functions.ts', () => {
 
     const resp = await check_status('at01', 'tu123')
     expect(resp.status).toStrictEqual('waiting-for-ep')
-  })
+  }, 6000)
 
   it('Failed task status', async () => {
     const sr: TaskStatusResponse = {

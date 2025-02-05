@@ -27260,6 +27260,13 @@ async function wait(milliseconds) {
     });
 }
 
+var REGEX = /^(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$/i;
+
+function validate(uuid) {
+    return typeof uuid === 'string' && REGEX.test(uuid);
+}
+
+const timeout = 5000;
 /**
  * Retrieve bearer tokens from Globus Auth
  *
@@ -27310,17 +27317,27 @@ function getToken(CLIENT_ID, CLIENT_SECRET) {
  *
  */
 function submit_tasks(access_token, endpoint_uuid, function_uuid, args, kwargs) {
-    const size_args = args.length + 4;
-    const size_kwargs = kwargs.length + 5;
+    // checking if valid type
+    if (!validate(endpoint_uuid)) {
+        throw new Error(`Endpoint UUID ${endpoint_uuid} is not a valid UUID`);
+    }
+    else if (!validate(function_uuid)) {
+        throw new Error(`Function UUID ${function_uuid} is not a valid UUID`);
+    }
+    // check if args and kwargs are valid JSON
+    JSON.parse(args);
+    JSON.parse(kwargs);
+    // configure inputs to be Globus Compute JSONData
+    const JSONDataSerdeID = '11';
+    const a = `${JSONDataSerdeID}\n${args}`;
+    const k = `${JSONDataSerdeID}\n${kwargs}`;
+    const serde_args = `${a.length}\n${a}${k.length}\n${k}`;
     const headers = new Headers();
     headers.set('Content-Type', 'application/json');
     headers.set('Authorization', `Bearer ${access_token}`);
     const body = {
-        create_queue: false,
         tasks: {
-            [function_uuid]: [
-                `${size_args}\n11\n${args}\n${size_kwargs}\n11\n${kwargs}\n`
-            ]
+            [function_uuid]: [serde_args]
         }
     };
     const content_len = JSON.stringify(body).length;
@@ -27370,8 +27387,8 @@ function check_status(access_token, task_uuid) {
                 throw new Error(await response.text());
             }
             const results = (await response.json());
-            if (results.status === 'waiting-for-ep') {
-                await wait(1000);
+            if (['success', 'failed'].indexOf(results.status.toLowerCase()) == -1) {
+                await wait(timeout);
                 // just to enable testing.
                 if (results.task_id === 'testing') {
                     return results;

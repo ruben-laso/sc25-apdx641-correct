@@ -1,6 +1,9 @@
 import { Token, TaskStatusResponse, TaskSubmission } from './interfaces.js'
 import { wait } from './wait.js'
 import { Buffer } from 'buffer'
+import { validate as isValidUUID } from 'uuid'
+
+const timeout = 5000
 
 /**
  * Retrieve bearer tokens from Globus Auth
@@ -68,19 +71,30 @@ export function submit_tasks(
   args: string,
   kwargs: string
 ): Promise<TaskSubmission> {
-  const size_args: number = args.length + 4
-  const size_kwargs: number = kwargs.length + 5
+  // checking if valid type
+  if (!isValidUUID(endpoint_uuid)) {
+    throw new Error(`Endpoint UUID ${endpoint_uuid} is not a valid UUID`)
+  } else if (!isValidUUID(function_uuid)) {
+    throw new Error(`Function UUID ${function_uuid} is not a valid UUID`)
+  }
+
+  // check if args and kwargs are valid JSON
+  JSON.parse(args)
+  JSON.parse(kwargs)
+
+  // configure inputs to be Globus Compute JSONData
+  const JSONDataSerdeID = '11'
+  const a = `${JSONDataSerdeID}\n${args}`
+  const k = `${JSONDataSerdeID}\n${kwargs}`
+  const serde_args = `${a.length}\n${a}${k.length}\n${k}`
 
   const headers: Headers = new Headers()
   headers.set('Content-Type', 'application/json')
   headers.set('Authorization', `Bearer ${access_token}`)
 
   const body: object = {
-    create_queue: false,
     tasks: {
-      [function_uuid]: [
-        `${size_args}\n11\n${args}\n${size_kwargs}\n11\n${kwargs}\n`
-      ]
+      [function_uuid]: [serde_args]
     }
   }
 
@@ -148,9 +162,9 @@ export function check_status(
 
       const results: TaskStatusResponse =
         (await response.json()) as TaskStatusResponse
-
-      if (results.status === 'waiting-for-ep') {
-        await wait(1000)
+      
+      if (['success', 'failed'].indexOf(results.status.toLowerCase()) == -1) {
+        await wait(timeout)
 
         // just to enable testing.
         if (results.task_id === 'testing') {
