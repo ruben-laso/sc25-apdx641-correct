@@ -162,7 +162,7 @@ export function check_status(
 
       const results: TaskStatusResponse =
         (await response.json()) as TaskStatusResponse
-      
+
       if (['success', 'failed'].indexOf(results.status.toLowerCase()) == -1) {
         await wait(timeout)
 
