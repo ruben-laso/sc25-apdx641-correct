@@ -27424,7 +27424,7 @@ async function run() {
         const function_uuid = coreExports.getInput('function_uuid');
         const args = coreExports.getInput('args');
         const kwargs = coreExports.getInput('kwargs');
-        const serialized = coreExports.getInput('serialized');
+        const serialized = coreExports.getInput('serialized_inputs');
         const token = await getToken(CLIENT_ID, CLIENT_SECRET);
         const batch_res = await submit_tasks(token.access_token, endpoint_uuid, function_uuid, args, kwargs, serialized);
         const keys = Object.keys(batch_res.tasks)[0];

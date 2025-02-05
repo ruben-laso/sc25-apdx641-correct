@@ -16,7 +16,7 @@ export async function run(): Promise<void> {
 
     const args: string = core.getInput('args')
     const kwargs: string = core.getInput('kwargs')
-    const serialized: string = core.getInput('serialized')
+    const serialized: string = core.getInput('serialized_inputs')
 
     const token: Token = await getToken(CLIENT_ID, CLIENT_SECRET)
     const batch_res = await submit_tasks(
