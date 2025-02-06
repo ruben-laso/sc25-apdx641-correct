@@ -27426,8 +27426,9 @@ async function run() {
         coreExports.setOutput('response', response);
         if (response.status === 'success') {
             let data = response.result;
-            data = `"${data}"`.replace(/\n/g, '\\n');
-            const output = execSync(`python -c 'from globus_compute_sdk.serialize.facade import ComputeSerializer; print(ComputeSerializer().deserialize(${data}))'`, { encoding: 'utf-8' });
+            data = `"${data}"`.replace(/00\n/g, '');
+            data = `${data}`.replace(/\n/g, '');
+            const output = execSync(`python -c 'import dill; import codecs;print(dill.loads(codecs.decode(${data}.encode(), "base64")))'`, { encoding: 'utf-8' });
             coreExports.setOutput('result', output);
         }
         else {
