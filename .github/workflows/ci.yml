@@ -65,4 +65,4 @@ jobs:
           kwargs: '{"inpt": "test"}'
       - name: Print Output
         id: output
-        run: echo "${{ steps.test-action.outputs.output }}"
+        run: echo "${{ steps.test-action.outputs.response }}"
