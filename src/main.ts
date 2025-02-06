@@ -38,7 +38,7 @@ export async function run(): Promise<void> {
       data = `${data}`.replace(/\n/g, '')
 
       const output = execSync(
-        `python -c 'import dill; import codecs;print(dill.loads(codecs.decode(${data}.encode(), "base64")))'`,
+        `python -c 'import pickle; import codecs;print(pickle.loads(codecs.decode(${data}.encode(), "base64")))'`,
         { encoding: 'utf-8' }
       )
       core.setOutput('result', output)
