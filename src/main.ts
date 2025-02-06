@@ -33,8 +33,10 @@ export async function run(): Promise<void> {
     core.setOutput('response', response)
 
     if (response.status === 'success') {
+      let data = response.result
+      data = `"${data}"`.replace(/\n/g, '\\n')
       const output = execSync(
-        `python -c "from globus_compute_sdk.serialize.facade import ComputeSerializer; print(ComputeSerializer().deserialize('${response.result}'))"`,
+        `python -c 'from globus_compute_sdk.serialize.facade import ComputeSerializer; print(ComputeSerializer().deserialize(${data}))'`,
         { encoding: 'utf-8' }
       )
       core.setOutput('result', output)

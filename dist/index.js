@@ -27425,7 +27425,9 @@ async function run() {
         const response = await check_status(token.access_token, task_uuid);
         coreExports.setOutput('response', response);
         if (response.status === 'success') {
-            const output = execSync(`python -c "from globus_compute_sdk.serialize.facade import ComputeSerializer; print(ComputeSerializer().deserialize('${response.result}'))"`, { encoding: 'utf-8' });
+            let data = response.result;
+            data = `"${data}"`.replace(/\n/g, '\\n');
+            const output = execSync(`python -c 'from globus_compute_sdk.serialize.facade import ComputeSerializer; print(ComputeSerializer().deserialize(${data}))'`, { encoding: 'utf-8' });
             coreExports.setOutput('result', output);
         }
         else {
