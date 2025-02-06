@@ -25,7 +25,7 @@ import require$$1$4 from 'url';
 import require$$3$1 from 'zlib';
 import require$$6 from 'string_decoder';
 import require$$0$9 from 'diagnostics_channel';
-import require$$2$2 from 'child_process';
+import require$$2$2, { execSync } from 'child_process';
 import require$$6$1 from 'timers';
 
 var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
@@ -27316,7 +27316,7 @@ function getToken(CLIENT_ID, CLIENT_SECRET) {
  * @returns Task submission response returned by Globus Compute
  *
  */
-function submit_tasks(access_token, endpoint_uuid, function_uuid, args, kwargs, serialized) {
+function submit_tasks(access_token, endpoint_uuid, function_uuid, args, kwargs) {
     // checking if valid type
     if (!validate(endpoint_uuid)) {
         throw new Error(`Endpoint UUID ${endpoint_uuid} is not a valid UUID`);
@@ -27325,19 +27325,13 @@ function submit_tasks(access_token, endpoint_uuid, function_uuid, args, kwargs, 
         throw new Error(`Function UUID ${function_uuid} is not a valid UUID`);
     }
     // configure inputs to be Globus Compute JSONData or accept serialized kwargs
-    let serde_args;
     const JSONDataSerdeID = '11';
     const a = `${JSONDataSerdeID}\n${args}`;
-    if (serialized.length > 0) {
-        serde_args = `${a.length}\n${a}${serialized}`;
-    }
-    else {
-        // check if args and kwargs are valid JSON
-        JSON.parse(args);
-        JSON.parse(kwargs);
-        const k = `${JSONDataSerdeID}\n${kwargs}`;
-        serde_args = `${a.length}\n${a}${k.length}\n${k}`;
-    }
+    // check if args and kwargs are valid JSON
+    JSON.parse(args);
+    JSON.parse(kwargs);
+    const k = `${JSONDataSerdeID}\n${kwargs}`;
+    const serde_args = `${a.length}\n${a}${k.length}\n${k}`;
     const headers = new Headers();
     headers.set('Content-Type', 'application/json');
     headers.set('Authorization', `Bearer ${access_token}`);
@@ -27424,13 +27418,19 @@ async function run() {
         const function_uuid = coreExports.getInput('function_uuid');
         const args = coreExports.getInput('args');
         const kwargs = coreExports.getInput('kwargs');
-        const serialized = coreExports.getInput('serialized_inputs');
         const token = await getToken(CLIENT_ID, CLIENT_SECRET);
-        const batch_res = await submit_tasks(token.access_token, endpoint_uuid, function_uuid, args, kwargs, serialized);
+        const batch_res = await submit_tasks(token.access_token, endpoint_uuid, function_uuid, args, kwargs);
         const keys = Object.keys(batch_res.tasks)[0];
         const task_uuid = batch_res.tasks[keys][0];
-        const result = await check_status(token.access_token, task_uuid);
-        coreExports.setOutput('output', result);
+        const response = await check_status(token.access_token, task_uuid);
+        coreExports.setOutput('response', response);
+        if (response.status === 'success') {
+            const output = execSync(`python -c "from globus_compute_sdk.serialize.facade import ComputeSerializer; print(ComputeSerializer().deserialize('${response.result}'))"`, { encoding: 'utf-8' });
+            coreExports.setOutput('result', output);
+        }
+        else {
+            coreExports.setOutput('result', '');
+        }
     }
     catch (error) {
         coreExports.setFailed(error);

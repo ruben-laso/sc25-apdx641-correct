@@ -19,13 +19,13 @@ inputs:
   kwargs:
     description: Task input kwargs specified as a dictionary of kwargs
     default: '{}'
-  serialized_inputs:
-    description:
-      Python serialized tasks inputs. Required when chaining functions together.
-    default: ''
 outputs:
-  output:
-    description: Task execution result
+  response:
+    description: Globus SDK HTTP response for task execution
+  result:
+    description:
+      Task execution result. Is empty unless response status indicates task
+      succeeded
 runs:
   using: 'node20'
   main: 'dist/index.js'

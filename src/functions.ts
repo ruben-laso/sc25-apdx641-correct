@@ -69,8 +69,7 @@ export function submit_tasks(
   endpoint_uuid: string,
   function_uuid: string,
   args: string,
-  kwargs: string,
-  serialized: string
+  kwargs: string
 ): Promise<TaskSubmission> {
   // checking if valid type
   if (!isValidUUID(endpoint_uuid)) {
@@ -80,20 +79,15 @@ export function submit_tasks(
   }
 
   // configure inputs to be Globus Compute JSONData or accept serialized kwargs
-  let serde_args: string
   const JSONDataSerdeID = '11'
   const a = `${JSONDataSerdeID}\n${args}`
 
-  if (serialized.length > 0) {
-    serde_args = `${a.length}\n${a}${serialized}`
-  } else {
-    // check if args and kwargs are valid JSON
-    JSON.parse(args)
-    JSON.parse(kwargs)
+  // check if args and kwargs are valid JSON
+  JSON.parse(args)
+  JSON.parse(kwargs)
 
-    const k = `${JSONDataSerdeID}\n${kwargs}`
-    serde_args = `${a.length}\n${a}${k.length}\n${k}`
-  }
+  const k = `${JSONDataSerdeID}\n${kwargs}`
+  const serde_args = `${a.length}\n${a}${k.length}\n${k}`
 
   const headers: Headers = new Headers()
   headers.set('Content-Type', 'application/json')

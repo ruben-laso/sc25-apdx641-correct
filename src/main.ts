@@ -1,6 +1,7 @@
 import * as core from '@actions/core'
 import { Token } from './interfaces.js'
 import { getToken, submit_tasks, check_status } from './functions.js'
+import { execSync } from 'child_process'
 
 /**
  * The main function for the action.
@@ -16,7 +17,6 @@ export async function run(): Promise<void> {
 
     const args: string = core.getInput('args')
     const kwargs: string = core.getInput('kwargs')
-    const serialized: string = core.getInput('serialized_inputs')
 
     const token: Token = await getToken(CLIENT_ID, CLIENT_SECRET)
     const batch_res = await submit_tasks(
@@ -24,13 +24,23 @@ export async function run(): Promise<void> {
       endpoint_uuid,
       function_uuid,
       args,
-      kwargs,
-      serialized
+      kwargs
     )
     const keys: string = Object.keys(batch_res.tasks)[0]
     const task_uuid: string = batch_res.tasks[keys as keyof object][0]
-    const result = await check_status(token.access_token, task_uuid)
-    core.setOutput('output', result)
+    const response = await check_status(token.access_token, task_uuid)
+
+    core.setOutput('response', response)
+
+    if (response.status === 'success') {
+      const output = execSync(
+        `python -c "from globus_compute_sdk.serialize.facade import ComputeSerializer; print(ComputeSerializer().deserialize('${response.result}'))"`,
+        { encoding: 'utf-8' }
+      )
+      core.setOutput('result', output)
+    } else {
+      core.setOutput('result', '')
+    }
   } catch (error) {
     core.setFailed(error as Error)
   }

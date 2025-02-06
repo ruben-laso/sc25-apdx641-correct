@@ -9,19 +9,21 @@ import { jest } from '@jest/globals'
 import * as core from '../__fixtures__/core.js'
 import { wait } from '../__fixtures__/wait.js'
 import * as gcf from '../__fixtures__/functions.js'
+import * as cp from '../__fixtures__/child_process'
 
 // Mocks should be declared before the module being tested is imported.
 jest.unstable_mockModule('@actions/core', () => core)
 jest.unstable_mockModule('../src/wait.js', () => ({ wait }))
 jest.unstable_mockModule('../src/functions.js', () => gcf)
+jest.unstable_mockModule('child_process', () => cp)
 
 // The module being tested should be imported dynamically. This ensures that the
 // mocks are used in place of any actual dependencies.
 const { run } = await import('../src/main.js')
 
-const output = {
+let output = {
   task_id: 't1',
-  status: 'waiting-for-ep',
+  status: 'success',
   result: 'res',
   completion_t: '1',
   exception: 'ex',
@@ -69,6 +71,8 @@ describe('main.ts', () => {
 
     // Mock the wait function so that it does not actually wait.
     wait.mockImplementation(() => Promise.resolve('done!'))
+
+    cp.execSync.mockReturnValueOnce('res')
   })
 
   afterEach(() => {
@@ -77,7 +81,23 @@ describe('main.ts', () => {
 
   it('Check that main function runs with inputs', async () => {
     await run()
-    expect(core.setOutput).toHaveBeenCalledWith('output', output)
+    expect(core.setOutput).toHaveBeenCalledWith('response', output)
+    expect(core.setOutput).toHaveBeenCalledWith('result', output.result)
+  })
+
+  it("Check that output result isn't deserialized when task fails", async () => {
+    output = {
+      task_id: 't1',
+      status: 'failed',
+      result: 'res',
+      completion_t: '1',
+      exception: 'ex',
+      details: {}
+    }
+
+    await run()
+    expect(core.setOutput).toHaveBeenCalledWith('response', output)
+    expect(core.setOutput).toHaveBeenCalledWith('result', '')
   })
 
   it('Unset getToken mock', async () => {
