@@ -40,7 +40,8 @@ export async function run(): Promise<void> {
       const output = execSync(
         `python -c 'import pickle; import codecs;print(pickle.loads(codecs.decode(${data}.encode(), "base64")))'`,
         { encoding: 'utf-8' }
-      )
+      ).replace(/\n/g, '')
+
       core.setOutput('result', output)
     } else {
       core.setOutput('result', '')

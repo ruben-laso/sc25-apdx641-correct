@@ -27428,7 +27428,7 @@ async function run() {
             let data = response.result;
             data = `"${data}"`.replace(/00\n/g, '');
             data = `${data}`.replace(/\n/g, '');
-            const output = execSync(`python -c 'import pickle; import codecs;print(pickle.loads(codecs.decode(${data}.encode(), "base64")))'`, { encoding: 'utf-8' });
+            const output = execSync(`python -c 'import pickle; import codecs;print(pickle.loads(codecs.decode(${data}.encode(), "base64")))'`, { encoding: 'utf-8' }).replace(/\n/g, '');
             coreExports.setOutput('result', output);
         }
         else {
