@@ -27435,6 +27435,9 @@ async function run() {
             coreExports.setOutput('result', output);
             const output_json = JSON.parse(output);
             if ('stdout' in output_json) {
+                if ('returncode' in output_json && output_json['returncode'] != 0) {
+                    throw Error(output_json['stdout']);
+                }
                 console.log(output_json['stdout']);
             }
             else {

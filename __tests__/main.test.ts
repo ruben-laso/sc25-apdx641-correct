@@ -101,6 +101,15 @@ describe('main.ts', () => {
     expect(core.setOutput).toHaveBeenCalledWith('result', result)
   })
 
+  it('Check that error is raised in case of nonzero returncode', async () => {
+    const result = JSON.stringify({ stdout: 'stdout', returncode: 2 })
+    cp.execSync.mockReset()
+    cp.execSync.mockReturnValueOnce(result)
+    await run()
+
+    expect(core.setFailed).toHaveBeenCalledWith(Error('stdout'))
+  })
+
   it("Check that output result isn't deserialized when task fails", async () => {
     output = {
       task_id: 't1',
