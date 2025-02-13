@@ -38,7 +38,10 @@ export async function run(): Promise<void> {
       data = `${data}`.replace(/\n/g, '')
 
       const output = execSync(
-        `python -c 'import pickle; import codecs; import json; print(json.dumps(pickle.loads(codecs.decode(${data}.encode(), "base64"))))'`,
+        `python -c 'import pickle; import codecs; import json;` +
+          ` data = pickle.loads(codecs.decode(${data}.encode(), "base64"));` +
+          ` print(json.dumps({"stdout": data.stdout, "stderr": data.stderr, "cmd": data.cmd, "returncode": data.returncode}` +
+          ` if not isinstance(data, dict) else data))'`,
         { encoding: 'utf-8' }
       ).replace(/\n/g, '')
 
