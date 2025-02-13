@@ -27430,9 +27430,17 @@ async function run() {
             data = `${data}`.replace(/\n/g, '');
             const output = execSync(`python -c 'import pickle; import codecs; import json;` +
                 ` data = pickle.loads(codecs.decode(${data}.encode(), "base64"));` +
-                ` print(json.dumps({"stdout": data.stdout, "stderr": data.stderr, "cmd": data.cmd, "returncode": data.returncode}` +
-                ` if not isinstance(data, dict) else data))'`, { encoding: 'utf-8' }).replace(/\n/g, '');
+                ` print(json.dumps({"stdout": data.stdout, "stderr": data.stderr, "cmd": data.cmd, "returncode": data.returncode})` +
+                ` if not isinstance(data, dict) else json.dumps(data).replace("\\n", ""))'`, { encoding: 'utf-8' });
             coreExports.setOutput('result', output);
+            const output_json = JSON.parse(output);
+            if ('stdout' in output_json) {
+                console.log(output_json['stdout']);
+            }
+            else {
+                console.log(output_json);
+            }
+            // json.dumps({"stdout": data.stdout.replace('\\\\n', '\\n'), "stderr": data.stderr, "cmd": data.cmd, "returncode": data.returncode}`
         }
         else {
             coreExports.setOutput('result', '');

@@ -85,6 +85,22 @@ describe('main.ts', () => {
     expect(core.setOutput).toHaveBeenCalledWith('result', output.result)
   })
 
+  it('Add coverage for JSON output types', async () => {
+    let result = JSON.stringify({ stdout: 'stdout' })
+    cp.execSync.mockReset()
+    cp.execSync.mockReturnValueOnce(result)
+    await run()
+    expect(core.setOutput).toHaveBeenCalledWith('response', output)
+    expect(core.setOutput).toHaveBeenCalledWith('result', result)
+
+    result = JSON.stringify({ stderr: 'stderr' })
+    cp.execSync.mockReset()
+    cp.execSync.mockReturnValueOnce(result)
+    await run()
+    expect(core.setOutput).toHaveBeenCalledWith('response', output)
+    expect(core.setOutput).toHaveBeenCalledWith('result', result)
+  })
+
   it("Check that output result isn't deserialized when task fails", async () => {
     output = {
       task_id: 't1',
