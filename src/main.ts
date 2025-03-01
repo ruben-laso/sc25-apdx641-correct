@@ -18,6 +18,12 @@ export async function run(): Promise<void> {
     const args: string = core.getInput('args')
     const kwargs: string = core.getInput('kwargs')
 
+    // install globus-compute-sdk if not already installed
+    execSync(
+      'gc_installed=$(pip freeze | grep globus-compute-sdk | wc -l) &&' +
+        ' if [ ${gc_installed} -lt 1 ]; then pip install globus-compute-sdk; fi;'
+    )
+
     const token: Token = await getToken(CLIENT_ID, CLIENT_SECRET)
     const batch_res = await submit_tasks(
       token.access_token,
@@ -34,12 +40,11 @@ export async function run(): Promise<void> {
 
     if (response.status === 'success') {
       let data = response.result
-      data = `"${data}"`.replace(/00\n/g, '')
-      data = `${data}`.replace(/\n/g, '')
+      data = data.replace(/\n/g, '\\n')
 
       const output = execSync(
-        `python -c 'import pickle; import codecs; import json;` +
-          ` data = pickle.loads(codecs.decode(${data}.encode(), "base64"));` +
+        `python -c 'import globus_compute_sdk; import json;` +
+          ` data = globus_compute_sdk.serialize.concretes.DillDataBase64().deserialize("${data}");` +
           ` print(json.dumps({"stdout": data.stdout, "stderr": data.stderr, "cmd": data.cmd, "returncode": data.returncode})` +
           ` if not isinstance(data, dict) else json.dumps(data).replace("\\n", ""))'`,
         { encoding: 'utf-8' }

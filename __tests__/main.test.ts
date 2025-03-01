@@ -80,6 +80,8 @@ describe('main.ts', () => {
   })
 
   it('Check that main function runs with inputs', async () => {
+    cp.execSync.mockReset()
+    cp.execSync.mockReturnValue(output.result)
     await run()
     expect(core.setOutput).toHaveBeenCalledWith('response', output)
     expect(core.setOutput).toHaveBeenCalledWith('result', output.result)
@@ -88,14 +90,14 @@ describe('main.ts', () => {
   it('Add coverage for JSON output types', async () => {
     let result = JSON.stringify({ stdout: 'stdout' })
     cp.execSync.mockReset()
-    cp.execSync.mockReturnValueOnce(result)
+    cp.execSync.mockReturnValue(result)
     await run()
     expect(core.setOutput).toHaveBeenCalledWith('response', output)
     expect(core.setOutput).toHaveBeenCalledWith('result', result)
 
     result = JSON.stringify({ stderr: 'stderr' })
     cp.execSync.mockReset()
-    cp.execSync.mockReturnValueOnce(result)
+    cp.execSync.mockReturnValue(result)
     await run()
     expect(core.setOutput).toHaveBeenCalledWith('response', output)
     expect(core.setOutput).toHaveBeenCalledWith('result', result)
@@ -104,7 +106,7 @@ describe('main.ts', () => {
   it('Check that error is raised in case of nonzero returncode', async () => {
     const result = JSON.stringify({ stdout: 'stdout', returncode: 2 })
     cp.execSync.mockReset()
-    cp.execSync.mockReturnValueOnce(result)
+    cp.execSync.mockReturnValue(result)
     await run()
 
     expect(core.setFailed).toHaveBeenCalledWith(Error('stdout'))
