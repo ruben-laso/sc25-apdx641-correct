@@ -27433,7 +27433,7 @@ async function run() {
             const output = execSync(`python -c 'import globus_compute_sdk; import json;` +
                 ` data = globus_compute_sdk.serialize.concretes.DillDataBase64().deserialize("${data}");` +
                 ` print(json.dumps({"stdout": data.stdout, "stderr": data.stderr, "cmd": data.cmd, "returncode": data.returncode})` +
-                ` if not isinstance(data, dict) else json.dumps(data).replace("\\n", ""))'`, { encoding: 'utf-8' });
+                ` if not isinstance(data, dict) else json.dumps(data).replace("\\n", ""), end="")'`, { encoding: 'utf-8' });
             coreExports.setOutput('result', output);
             const output_json = JSON.parse(output);
             if ('stdout' in output_json) {

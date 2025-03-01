@@ -46,7 +46,7 @@ export async function run(): Promise<void> {
         `python -c 'import globus_compute_sdk; import json;` +
           ` data = globus_compute_sdk.serialize.concretes.DillDataBase64().deserialize("${data}");` +
           ` print(json.dumps({"stdout": data.stdout, "stderr": data.stderr, "cmd": data.cmd, "returncode": data.returncode})` +
-          ` if not isinstance(data, dict) else json.dumps(data).replace("\\n", ""))'`,
+          ` if not isinstance(data, dict) else json.dumps(data).replace("\\n", ""), end="")'`,
         { encoding: 'utf-8' }
       )
 
