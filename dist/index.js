@@ -27418,6 +27418,9 @@ async function run() {
         const function_uuid = coreExports.getInput('function_uuid');
         const args = coreExports.getInput('args');
         const kwargs = coreExports.getInput('kwargs');
+        // install globus-compute-sdk if not already installed
+        execSync('gc_installed=$(pip freeze | grep globus-compute-sdk | wc -l) &&' +
+            ' if [ ${gc_installed} -lt 1 ]; then pip install globus-compute-sdk; fi;');
         const token = await getToken(CLIENT_ID, CLIENT_SECRET);
         const batch_res = await submit_tasks(token.access_token, endpoint_uuid, function_uuid, args, kwargs);
         const keys = Object.keys(batch_res.tasks)[0];
@@ -27426,10 +27429,9 @@ async function run() {
         coreExports.setOutput('response', response);
         if (response.status === 'success') {
             let data = response.result;
-            data = `"${data}"`.replace(/00\n/g, '');
-            data = `${data}`.replace(/\n/g, '');
-            const output = execSync(`python -c 'import pickle; import codecs; import json;` +
-                ` data = pickle.loads(codecs.decode(${data}.encode(), "base64"));` +
+            data = data.replace(/\n/g, '\\n');
+            const output = execSync(`python -c 'import globus_compute_sdk; import json;` +
+                ` data = globus_compute_sdk.serialize.concretes.DillDataBase64().deserialize("${data}");` +
                 ` print(json.dumps({"stdout": data.stdout, "stderr": data.stderr, "cmd": data.cmd, "returncode": data.returncode})` +
                 ` if not isinstance(data, dict) else json.dumps(data).replace("\\n", ""))'`, { encoding: 'utf-8' });
             coreExports.setOutput('result', output);
