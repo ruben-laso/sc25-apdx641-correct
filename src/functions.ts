@@ -63,7 +63,7 @@ export function getToken(
  *
  */
 export function submit_tasks(
-  access_token: string,
+  access_token: string | null,
   endpoint_uuid: string,
   function_uuid: string,
   args: string,
@@ -135,7 +135,7 @@ export function submit_tasks(
  * @returns TaskStatusResponse returned by Globus Compute
  */
 export function check_status(
-  access_token: string,
+  access_token: string | null,
   task_uuid: string
 ): Promise<TaskStatusResponse> {
   const headers: Headers = new Headers()

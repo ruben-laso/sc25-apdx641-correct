@@ -10,6 +10,7 @@ import * as core from '../__fixtures__/core.js'
 import { wait } from '../__fixtures__/wait.js'
 import * as gcf from '../__fixtures__/functions.js'
 import * as cp from '../__fixtures__/child_process'
+import { LocalStorage } from 'node-localstorage'
 
 // Mocks should be declared before the module being tested is imported.
 jest.unstable_mockModule('@actions/core', () => core)
@@ -127,7 +128,11 @@ describe('main.ts', () => {
     expect(core.setOutput).toHaveBeenCalledWith('result', '')
   })
 
-  it('Unset getToken mock', async () => {
+  it('Remove cache and unset getToken mock', async () => {
+    const localStorage = new LocalStorage('./tmp')
+
+    localStorage.removeItem('access-token')
+
     gcf.getToken
       .mockClear()
       .mockRejectedValueOnce(new Error('function execution did not pass'))

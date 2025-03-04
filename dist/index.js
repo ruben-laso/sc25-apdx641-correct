@@ -259,7 +259,7 @@ function requireFileCommand () {
 
 var oidcUtils = {};
 
-var lib = {};
+var lib$1 = {};
 
 var proxy = {};
 
@@ -24347,13 +24347,13 @@ function requireUndici () {
 	return undici;
 }
 
-var hasRequiredLib;
+var hasRequiredLib$1;
 
-function requireLib () {
-	if (hasRequiredLib) return lib;
-	hasRequiredLib = 1;
+function requireLib$1 () {
+	if (hasRequiredLib$1) return lib$1;
+	hasRequiredLib$1 = 1;
 	/* eslint-disable @typescript-eslint/no-explicit-any */
-	var __createBinding = (lib && lib.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+	var __createBinding = (lib$1 && lib$1.__createBinding) || (Object.create ? (function(o, m, k, k2) {
 	    if (k2 === undefined) k2 = k;
 	    var desc = Object.getOwnPropertyDescriptor(m, k);
 	    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
@@ -24364,19 +24364,19 @@ function requireLib () {
 	    if (k2 === undefined) k2 = k;
 	    o[k2] = m[k];
 	}));
-	var __setModuleDefault = (lib && lib.__setModuleDefault) || (Object.create ? (function(o, v) {
+	var __setModuleDefault = (lib$1 && lib$1.__setModuleDefault) || (Object.create ? (function(o, v) {
 	    Object.defineProperty(o, "default", { enumerable: true, value: v });
 	}) : function(o, v) {
 	    o["default"] = v;
 	});
-	var __importStar = (lib && lib.__importStar) || function (mod) {
+	var __importStar = (lib$1 && lib$1.__importStar) || function (mod) {
 	    if (mod && mod.__esModule) return mod;
 	    var result = {};
 	    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
 	    __setModuleDefault(result, mod);
 	    return result;
 	};
-	var __awaiter = (lib && lib.__awaiter) || function (thisArg, _arguments, P, generator) {
+	var __awaiter = (lib$1 && lib$1.__awaiter) || function (thisArg, _arguments, P, generator) {
 	    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
 	    return new (P || (P = Promise))(function (resolve, reject) {
 	        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -24385,8 +24385,8 @@ function requireLib () {
 	        step((generator = generator.apply(thisArg, _arguments || [])).next());
 	    });
 	};
-	Object.defineProperty(lib, "__esModule", { value: true });
-	lib.HttpClient = lib.isHttps = lib.HttpClientResponse = lib.HttpClientError = lib.getProxyUrl = lib.MediaTypes = lib.Headers = lib.HttpCodes = undefined;
+	Object.defineProperty(lib$1, "__esModule", { value: true });
+	lib$1.HttpClient = lib$1.isHttps = lib$1.HttpClientResponse = lib$1.HttpClientError = lib$1.getProxyUrl = lib$1.MediaTypes = lib$1.Headers = lib$1.HttpCodes = undefined;
 	const http = __importStar(require$$2);
 	const https = __importStar(require$$3);
 	const pm = __importStar(requireProxy());
@@ -24421,16 +24421,16 @@ function requireLib () {
 	    HttpCodes[HttpCodes["BadGateway"] = 502] = "BadGateway";
 	    HttpCodes[HttpCodes["ServiceUnavailable"] = 503] = "ServiceUnavailable";
 	    HttpCodes[HttpCodes["GatewayTimeout"] = 504] = "GatewayTimeout";
-	})(HttpCodes || (lib.HttpCodes = HttpCodes = {}));
+	})(HttpCodes || (lib$1.HttpCodes = HttpCodes = {}));
 	var Headers;
 	(function (Headers) {
 	    Headers["Accept"] = "accept";
 	    Headers["ContentType"] = "content-type";
-	})(Headers || (lib.Headers = Headers = {}));
+	})(Headers || (lib$1.Headers = Headers = {}));
 	var MediaTypes;
 	(function (MediaTypes) {
 	    MediaTypes["ApplicationJson"] = "application/json";
-	})(MediaTypes || (lib.MediaTypes = MediaTypes = {}));
+	})(MediaTypes || (lib$1.MediaTypes = MediaTypes = {}));
 	/**
 	 * Returns the proxy URL, depending upon the supplied url and proxy environment variables.
 	 * @param serverUrl  The server URL where the request will be sent. For example, https://api.github.com
@@ -24439,7 +24439,7 @@ function requireLib () {
 	    const proxyUrl = pm.getProxyUrl(new URL(serverUrl));
 	    return proxyUrl ? proxyUrl.href : '';
 	}
-	lib.getProxyUrl = getProxyUrl;
+	lib$1.getProxyUrl = getProxyUrl;
 	const HttpRedirectCodes = [
 	    HttpCodes.MovedPermanently,
 	    HttpCodes.ResourceMoved,
@@ -24463,7 +24463,7 @@ function requireLib () {
 	        Object.setPrototypeOf(this, HttpClientError.prototype);
 	    }
 	}
-	lib.HttpClientError = HttpClientError;
+	lib$1.HttpClientError = HttpClientError;
 	class HttpClientResponse {
 	    constructor(message) {
 	        this.message = message;
@@ -24495,12 +24495,12 @@ function requireLib () {
 	        });
 	    }
 	}
-	lib.HttpClientResponse = HttpClientResponse;
+	lib$1.HttpClientResponse = HttpClientResponse;
 	function isHttps(requestUrl) {
 	    const parsedUrl = new URL(requestUrl);
 	    return parsedUrl.protocol === 'https:';
 	}
-	lib.isHttps = isHttps;
+	lib$1.isHttps = isHttps;
 	class HttpClient {
 	    constructor(userAgent, handlers, requestOptions) {
 	        this._ignoreSslError = false;
@@ -25000,10 +25000,10 @@ function requireLib () {
 	        });
 	    }
 	}
-	lib.HttpClient = HttpClient;
+	lib$1.HttpClient = HttpClient;
 	const lowercaseKeys = (obj) => Object.keys(obj).reduce((c, k) => ((c[k.toLowerCase()] = obj[k]), c), {});
 	
-	return lib;
+	return lib$1;
 }
 
 var auth = {};
@@ -25112,7 +25112,7 @@ function requireOidcUtils () {
 	};
 	Object.defineProperty(oidcUtils, "__esModule", { value: true });
 	oidcUtils.OidcClient = undefined;
-	const http_client_1 = requireLib();
+	const http_client_1 = requireLib$1();
 	const auth_1 = requireAuth();
 	const core_1 = requireCore();
 	class OidcClient {
@@ -27437,6 +27437,1145 @@ function check_status(access_token, task_uuid) {
     return wait_for_ep();
 }
 
+var LocalStorage = {};
+
+var lib = {exports: {}};
+
+var imurmurhash = {exports: {}};
+
+/**
+ * @preserve
+ * JS Implementation of incremental MurmurHash3 (r150) (as of May 10, 2013)
+ *
+ * @author <a href="mailto:jensyt@gmail.com">Jens Taylor</a>
+ * @see http://github.com/homebrewing/brauhaus-diff
+ * @author <a href="mailto:gary.court@gmail.com">Gary Court</a>
+ * @see http://github.com/garycourt/murmurhash-js
+ * @author <a href="mailto:aappleby@gmail.com">Austin Appleby</a>
+ * @see http://sites.google.com/site/murmurhash/
+ */
+
+var hasRequiredImurmurhash;
+
+function requireImurmurhash () {
+	if (hasRequiredImurmurhash) return imurmurhash.exports;
+	hasRequiredImurmurhash = 1;
+	(function (module) {
+		(function(){
+		    var cache;
+
+		    // Call this function without `new` to use the cached object (good for
+		    // single-threaded environments), or with `new` to create a new object.
+		    //
+		    // @param {string} key A UTF-16 or ASCII string
+		    // @param {number} seed An optional positive integer
+		    // @return {object} A MurmurHash3 object for incremental hashing
+		    function MurmurHash3(key, seed) {
+		        var m = this instanceof MurmurHash3 ? this : cache;
+		        m.reset(seed);
+		        if (typeof key === 'string' && key.length > 0) {
+		            m.hash(key);
+		        }
+
+		        if (m !== this) {
+		            return m;
+		        }
+		    }
+		    // Incrementally add a string to this hash
+		    //
+		    // @param {string} key A UTF-16 or ASCII string
+		    // @return {object} this
+		    MurmurHash3.prototype.hash = function(key) {
+		        var h1, k1, i, top, len;
+
+		        len = key.length;
+		        this.len += len;
+
+		        k1 = this.k1;
+		        i = 0;
+		        switch (this.rem) {
+		            case 0: k1 ^= len > i ? (key.charCodeAt(i++) & 0xffff) : 0;
+		            case 1: k1 ^= len > i ? (key.charCodeAt(i++) & 0xffff) << 8 : 0;
+		            case 2: k1 ^= len > i ? (key.charCodeAt(i++) & 0xffff) << 16 : 0;
+		            case 3:
+		                k1 ^= len > i ? (key.charCodeAt(i) & 0xff) << 24 : 0;
+		                k1 ^= len > i ? (key.charCodeAt(i++) & 0xff00) >> 8 : 0;
+		        }
+
+		        this.rem = (len + this.rem) & 3; // & 3 is same as % 4
+		        len -= this.rem;
+		        if (len > 0) {
+		            h1 = this.h1;
+		            while (1) {
+		                k1 = (k1 * 0x2d51 + (k1 & 0xffff) * 0xcc9e0000) & 0xffffffff;
+		                k1 = (k1 << 15) | (k1 >>> 17);
+		                k1 = (k1 * 0x3593 + (k1 & 0xffff) * 0x1b870000) & 0xffffffff;
+
+		                h1 ^= k1;
+		                h1 = (h1 << 13) | (h1 >>> 19);
+		                h1 = (h1 * 5 + 0xe6546b64) & 0xffffffff;
+
+		                if (i >= len) {
+		                    break;
+		                }
+
+		                k1 = ((key.charCodeAt(i++) & 0xffff)) ^
+		                     ((key.charCodeAt(i++) & 0xffff) << 8) ^
+		                     ((key.charCodeAt(i++) & 0xffff) << 16);
+		                top = key.charCodeAt(i++);
+		                k1 ^= ((top & 0xff) << 24) ^
+		                      ((top & 0xff00) >> 8);
+		            }
+
+		            k1 = 0;
+		            switch (this.rem) {
+		                case 3: k1 ^= (key.charCodeAt(i + 2) & 0xffff) << 16;
+		                case 2: k1 ^= (key.charCodeAt(i + 1) & 0xffff) << 8;
+		                case 1: k1 ^= (key.charCodeAt(i) & 0xffff);
+		            }
+
+		            this.h1 = h1;
+		        }
+
+		        this.k1 = k1;
+		        return this;
+		    };
+
+		    // Get the result of this hash
+		    //
+		    // @return {number} The 32-bit hash
+		    MurmurHash3.prototype.result = function() {
+		        var k1, h1;
+		        
+		        k1 = this.k1;
+		        h1 = this.h1;
+
+		        if (k1 > 0) {
+		            k1 = (k1 * 0x2d51 + (k1 & 0xffff) * 0xcc9e0000) & 0xffffffff;
+		            k1 = (k1 << 15) | (k1 >>> 17);
+		            k1 = (k1 * 0x3593 + (k1 & 0xffff) * 0x1b870000) & 0xffffffff;
+		            h1 ^= k1;
+		        }
+
+		        h1 ^= this.len;
+
+		        h1 ^= h1 >>> 16;
+		        h1 = (h1 * 0xca6b + (h1 & 0xffff) * 0x85eb0000) & 0xffffffff;
+		        h1 ^= h1 >>> 13;
+		        h1 = (h1 * 0xae35 + (h1 & 0xffff) * 0xc2b20000) & 0xffffffff;
+		        h1 ^= h1 >>> 16;
+
+		        return h1 >>> 0;
+		    };
+
+		    // Reset the hash object for reuse
+		    //
+		    // @param {number} seed An optional positive integer
+		    MurmurHash3.prototype.reset = function(seed) {
+		        this.h1 = typeof seed === 'number' ? seed : 0;
+		        this.rem = this.k1 = this.len = 0;
+		        return this;
+		    };
+
+		    // A cached object to use. This can be safely used if you're in a single-
+		    // threaded environment, otherwise you need to create new hashes to use.
+		    cache = new MurmurHash3();
+
+		    {
+		        module.exports = MurmurHash3;
+		    }
+		}()); 
+	} (imurmurhash));
+	return imurmurhash.exports;
+}
+
+var cjs = {};
+
+var signals = {};
+
+var hasRequiredSignals;
+
+function requireSignals () {
+	if (hasRequiredSignals) return signals;
+	hasRequiredSignals = 1;
+	(function (exports) {
+		Object.defineProperty(exports, "__esModule", { value: true });
+		exports.signals = undefined;
+		/**
+		 * This is not the set of all possible signals.
+		 *
+		 * It IS, however, the set of all signals that trigger
+		 * an exit on either Linux or BSD systems.  Linux is a
+		 * superset of the signal names supported on BSD, and
+		 * the unknown signals just fail to register, so we can
+		 * catch that easily enough.
+		 *
+		 * Windows signals are a different set, since there are
+		 * signals that terminate Windows processes, but don't
+		 * terminate (or don't even exist) on Posix systems.
+		 *
+		 * Don't bother with SIGKILL.  It's uncatchable, which
+		 * means that we can't fire any callbacks anyway.
+		 *
+		 * If a user does happen to register a handler on a non-
+		 * fatal signal like SIGWINCH or something, and then
+		 * exit, it'll end up firing `process.emit('exit')`, so
+		 * the handler will be fired anyway.
+		 *
+		 * SIGBUS, SIGFPE, SIGSEGV and SIGILL, when not raised
+		 * artificially, inherently leave the process in a
+		 * state from which it is not safe to try and enter JS
+		 * listeners.
+		 */
+		exports.signals = [];
+		exports.signals.push('SIGHUP', 'SIGINT', 'SIGTERM');
+		if (process.platform !== 'win32') {
+		    exports.signals.push('SIGALRM', 'SIGABRT', 'SIGVTALRM', 'SIGXCPU', 'SIGXFSZ', 'SIGUSR2', 'SIGTRAP', 'SIGSYS', 'SIGQUIT', 'SIGIOT'
+		    // should detect profiler and enable/disable accordingly.
+		    // see #21
+		    // 'SIGPROF'
+		    );
+		}
+		if (process.platform === 'linux') {
+		    exports.signals.push('SIGIO', 'SIGPOLL', 'SIGPWR', 'SIGSTKFLT');
+		}
+		
+	} (signals));
+	return signals;
+}
+
+var hasRequiredCjs;
+
+function requireCjs () {
+	if (hasRequiredCjs) return cjs;
+	hasRequiredCjs = 1;
+	(function (exports) {
+		var _a;
+		Object.defineProperty(exports, "__esModule", { value: true });
+		exports.unload = exports.load = exports.onExit = exports.signals = undefined;
+		// Note: since nyc uses this module to output coverage, any lines
+		// that are in the direct sync flow of nyc's outputCoverage are
+		// ignored, since we can never get coverage for them.
+		// grab a reference to node's real process object right away
+		const signals_js_1 = requireSignals();
+		Object.defineProperty(exports, "signals", { enumerable: true, get: function () { return signals_js_1.signals; } });
+		const processOk = (process) => !!process &&
+		    typeof process === 'object' &&
+		    typeof process.removeListener === 'function' &&
+		    typeof process.emit === 'function' &&
+		    typeof process.reallyExit === 'function' &&
+		    typeof process.listeners === 'function' &&
+		    typeof process.kill === 'function' &&
+		    typeof process.pid === 'number' &&
+		    typeof process.on === 'function';
+		const kExitEmitter = Symbol.for('signal-exit emitter');
+		const global = globalThis;
+		const ObjectDefineProperty = Object.defineProperty.bind(Object);
+		// teeny special purpose ee
+		class Emitter {
+		    emitted = {
+		        afterExit: false,
+		        exit: false,
+		    };
+		    listeners = {
+		        afterExit: [],
+		        exit: [],
+		    };
+		    count = 0;
+		    id = Math.random();
+		    constructor() {
+		        if (global[kExitEmitter]) {
+		            return global[kExitEmitter];
+		        }
+		        ObjectDefineProperty(global, kExitEmitter, {
+		            value: this,
+		            writable: false,
+		            enumerable: false,
+		            configurable: false,
+		        });
+		    }
+		    on(ev, fn) {
+		        this.listeners[ev].push(fn);
+		    }
+		    removeListener(ev, fn) {
+		        const list = this.listeners[ev];
+		        const i = list.indexOf(fn);
+		        /* c8 ignore start */
+		        if (i === -1) {
+		            return;
+		        }
+		        /* c8 ignore stop */
+		        if (i === 0 && list.length === 1) {
+		            list.length = 0;
+		        }
+		        else {
+		            list.splice(i, 1);
+		        }
+		    }
+		    emit(ev, code, signal) {
+		        if (this.emitted[ev]) {
+		            return false;
+		        }
+		        this.emitted[ev] = true;
+		        let ret = false;
+		        for (const fn of this.listeners[ev]) {
+		            ret = fn(code, signal) === true || ret;
+		        }
+		        if (ev === 'exit') {
+		            ret = this.emit('afterExit', code, signal) || ret;
+		        }
+		        return ret;
+		    }
+		}
+		class SignalExitBase {
+		}
+		const signalExitWrap = (handler) => {
+		    return {
+		        onExit(cb, opts) {
+		            return handler.onExit(cb, opts);
+		        },
+		        load() {
+		            return handler.load();
+		        },
+		        unload() {
+		            return handler.unload();
+		        },
+		    };
+		};
+		class SignalExitFallback extends SignalExitBase {
+		    onExit() {
+		        return () => { };
+		    }
+		    load() { }
+		    unload() { }
+		}
+		class SignalExit extends SignalExitBase {
+		    // "SIGHUP" throws an `ENOSYS` error on Windows,
+		    // so use a supported signal instead
+		    /* c8 ignore start */
+		    #hupSig = process.platform === 'win32' ? 'SIGINT' : 'SIGHUP';
+		    /* c8 ignore stop */
+		    #emitter = new Emitter();
+		    #process;
+		    #originalProcessEmit;
+		    #originalProcessReallyExit;
+		    #sigListeners = {};
+		    #loaded = false;
+		    constructor(process) {
+		        super();
+		        this.#process = process;
+		        // { <signal>: <listener fn>, ... }
+		        this.#sigListeners = {};
+		        for (const sig of signals_js_1.signals) {
+		            this.#sigListeners[sig] = () => {
+		                // If there are no other listeners, an exit is coming!
+		                // Simplest way: remove us and then re-send the signal.
+		                // We know that this will kill the process, so we can
+		                // safely emit now.
+		                const listeners = this.#process.listeners(sig);
+		                let { count } = this.#emitter;
+		                // This is a workaround for the fact that signal-exit v3 and signal
+		                // exit v4 are not aware of each other, and each will attempt to let
+		                // the other handle it, so neither of them do. To correct this, we
+		                // detect if we're the only handler *except* for previous versions
+		                // of signal-exit, and increment by the count of listeners it has
+		                // created.
+		                /* c8 ignore start */
+		                const p = process;
+		                if (typeof p.__signal_exit_emitter__ === 'object' &&
+		                    typeof p.__signal_exit_emitter__.count === 'number') {
+		                    count += p.__signal_exit_emitter__.count;
+		                }
+		                /* c8 ignore stop */
+		                if (listeners.length === count) {
+		                    this.unload();
+		                    const ret = this.#emitter.emit('exit', null, sig);
+		                    /* c8 ignore start */
+		                    const s = sig === 'SIGHUP' ? this.#hupSig : sig;
+		                    if (!ret)
+		                        process.kill(process.pid, s);
+		                    /* c8 ignore stop */
+		                }
+		            };
+		        }
+		        this.#originalProcessReallyExit = process.reallyExit;
+		        this.#originalProcessEmit = process.emit;
+		    }
+		    onExit(cb, opts) {
+		        /* c8 ignore start */
+		        if (!processOk(this.#process)) {
+		            return () => { };
+		        }
+		        /* c8 ignore stop */
+		        if (this.#loaded === false) {
+		            this.load();
+		        }
+		        const ev = opts?.alwaysLast ? 'afterExit' : 'exit';
+		        this.#emitter.on(ev, cb);
+		        return () => {
+		            this.#emitter.removeListener(ev, cb);
+		            if (this.#emitter.listeners['exit'].length === 0 &&
+		                this.#emitter.listeners['afterExit'].length === 0) {
+		                this.unload();
+		            }
+		        };
+		    }
+		    load() {
+		        if (this.#loaded) {
+		            return;
+		        }
+		        this.#loaded = true;
+		        // This is the number of onSignalExit's that are in play.
+		        // It's important so that we can count the correct number of
+		        // listeners on signals, and don't wait for the other one to
+		        // handle it instead of us.
+		        this.#emitter.count += 1;
+		        for (const sig of signals_js_1.signals) {
+		            try {
+		                const fn = this.#sigListeners[sig];
+		                if (fn)
+		                    this.#process.on(sig, fn);
+		            }
+		            catch (_) { }
+		        }
+		        this.#process.emit = (ev, ...a) => {
+		            return this.#processEmit(ev, ...a);
+		        };
+		        this.#process.reallyExit = (code) => {
+		            return this.#processReallyExit(code);
+		        };
+		    }
+		    unload() {
+		        if (!this.#loaded) {
+		            return;
+		        }
+		        this.#loaded = false;
+		        signals_js_1.signals.forEach(sig => {
+		            const listener = this.#sigListeners[sig];
+		            /* c8 ignore start */
+		            if (!listener) {
+		                throw new Error('Listener not defined for signal: ' + sig);
+		            }
+		            /* c8 ignore stop */
+		            try {
+		                this.#process.removeListener(sig, listener);
+		                /* c8 ignore start */
+		            }
+		            catch (_) { }
+		            /* c8 ignore stop */
+		        });
+		        this.#process.emit = this.#originalProcessEmit;
+		        this.#process.reallyExit = this.#originalProcessReallyExit;
+		        this.#emitter.count -= 1;
+		    }
+		    #processReallyExit(code) {
+		        /* c8 ignore start */
+		        if (!processOk(this.#process)) {
+		            return 0;
+		        }
+		        this.#process.exitCode = code || 0;
+		        /* c8 ignore stop */
+		        this.#emitter.emit('exit', this.#process.exitCode, null);
+		        return this.#originalProcessReallyExit.call(this.#process, this.#process.exitCode);
+		    }
+		    #processEmit(ev, ...args) {
+		        const og = this.#originalProcessEmit;
+		        if (ev === 'exit' && processOk(this.#process)) {
+		            if (typeof args[0] === 'number') {
+		                this.#process.exitCode = args[0];
+		                /* c8 ignore start */
+		            }
+		            /* c8 ignore start */
+		            const ret = og.call(this.#process, ev, ...args);
+		            /* c8 ignore start */
+		            this.#emitter.emit('exit', this.#process.exitCode, null);
+		            /* c8 ignore stop */
+		            return ret;
+		        }
+		        else {
+		            return og.call(this.#process, ev, ...args);
+		        }
+		    }
+		}
+		const process = globalThis.process;
+		// wrap so that we call the method on the actual handler, without
+		// exporting it directly.
+		_a = signalExitWrap(processOk(process) ? new SignalExit(process) : new SignalExitFallback()), 
+		/**
+		 * Called when the process is exiting, whether via signal, explicit
+		 * exit, or running out of stuff to do.
+		 *
+		 * If the global process object is not suitable for instrumentation,
+		 * then this will be a no-op.
+		 *
+		 * Returns a function that may be used to unload signal-exit.
+		 */
+		exports.onExit = _a.onExit, 
+		/**
+		 * Load the listeners.  Likely you never need to call this, unless
+		 * doing a rather deep integration with signal-exit functionality.
+		 * Mostly exposed for the benefit of testing.
+		 *
+		 * @internal
+		 */
+		exports.load = _a.load, 
+		/**
+		 * Unload the listeners.  Likely you never need to call this, unless
+		 * doing a rather deep integration with signal-exit functionality.
+		 * Mostly exposed for the benefit of testing.
+		 *
+		 * @internal
+		 */
+		exports.unload = _a.unload;
+		
+	} (cjs));
+	return cjs;
+}
+
+var hasRequiredLib;
+
+function requireLib () {
+	if (hasRequiredLib) return lib.exports;
+	hasRequiredLib = 1;
+	lib.exports = writeFile;
+	lib.exports.sync = writeFileSync;
+	lib.exports._getTmpname = getTmpname; // for testing
+	lib.exports._cleanupOnExit = cleanupOnExit;
+
+	const fs = require$$1;
+	const MurmurHash3 = requireImurmurhash();
+	const { onExit } = requireCjs();
+	const path = require$$1$5;
+	const { promisify } = require$$0$2;
+	const activeFiles = {};
+
+	// if we run inside of a worker_thread, `process.pid` is not unique
+	/* istanbul ignore next */
+	const threadId = (function getId () {
+	  try {
+	    const workerThreads = require('worker_threads');
+
+	    /// if we are in main thread, this is set to `0`
+	    return workerThreads.threadId
+	  } catch (e) {
+	    // worker_threads are not available, fallback to 0
+	    return 0
+	  }
+	})();
+
+	let invocations = 0;
+	function getTmpname (filename) {
+	  return filename + '.' +
+	    MurmurHash3(__filename)
+	      .hash(String(process.pid))
+	      .hash(String(threadId))
+	      .hash(String(++invocations))
+	      .result()
+	}
+
+	function cleanupOnExit (tmpfile) {
+	  return () => {
+	    try {
+	      fs.unlinkSync(typeof tmpfile === 'function' ? tmpfile() : tmpfile);
+	    } catch {
+	      // ignore errors
+	    }
+	  }
+	}
+
+	function serializeActiveFile (absoluteName) {
+	  return new Promise(resolve => {
+	    // make a queue if it doesn't already exist
+	    if (!activeFiles[absoluteName]) {
+	      activeFiles[absoluteName] = [];
+	    }
+
+	    activeFiles[absoluteName].push(resolve); // add this job to the queue
+	    if (activeFiles[absoluteName].length === 1) {
+	      resolve();
+	    } // kick off the first one
+	  })
+	}
+
+	// https://github.com/isaacs/node-graceful-fs/blob/master/polyfills.js#L315-L342
+	function isChownErrOk (err) {
+	  if (err.code === 'ENOSYS') {
+	    return true
+	  }
+
+	  const nonroot = !process.getuid || process.getuid() !== 0;
+	  if (nonroot) {
+	    if (err.code === 'EINVAL' || err.code === 'EPERM') {
+	      return true
+	    }
+	  }
+
+	  return false
+	}
+
+	async function writeFileAsync (filename, data, options = {}) {
+	  if (typeof options === 'string') {
+	    options = { encoding: options };
+	  }
+
+	  let fd;
+	  let tmpfile;
+	  /* istanbul ignore next -- The closure only gets called when onExit triggers */
+	  const removeOnExitHandler = onExit(cleanupOnExit(() => tmpfile));
+	  const absoluteName = path.resolve(filename);
+
+	  try {
+	    await serializeActiveFile(absoluteName);
+	    const truename = await promisify(fs.realpath)(filename).catch(() => filename);
+	    tmpfile = getTmpname(truename);
+
+	    if (!options.mode || !options.chown) {
+	      // Either mode or chown is not explicitly set
+	      // Default behavior is to copy it from original file
+	      const stats = await promisify(fs.stat)(truename).catch(() => {});
+	      if (stats) {
+	        if (options.mode == null) {
+	          options.mode = stats.mode;
+	        }
+
+	        if (options.chown == null && process.getuid) {
+	          options.chown = { uid: stats.uid, gid: stats.gid };
+	        }
+	      }
+	    }
+
+	    fd = await promisify(fs.open)(tmpfile, 'w', options.mode);
+	    if (options.tmpfileCreated) {
+	      await options.tmpfileCreated(tmpfile);
+	    }
+	    if (ArrayBuffer.isView(data)) {
+	      await promisify(fs.write)(fd, data, 0, data.length, 0);
+	    } else if (data != null) {
+	      await promisify(fs.write)(fd, String(data), 0, String(options.encoding || 'utf8'));
+	    }
+
+	    if (options.fsync !== false) {
+	      await promisify(fs.fsync)(fd);
+	    }
+
+	    await promisify(fs.close)(fd);
+	    fd = null;
+
+	    if (options.chown) {
+	      await promisify(fs.chown)(tmpfile, options.chown.uid, options.chown.gid).catch(err => {
+	        if (!isChownErrOk(err)) {
+	          throw err
+	        }
+	      });
+	    }
+
+	    if (options.mode) {
+	      await promisify(fs.chmod)(tmpfile, options.mode).catch(err => {
+	        if (!isChownErrOk(err)) {
+	          throw err
+	        }
+	      });
+	    }
+
+	    await promisify(fs.rename)(tmpfile, truename);
+	  } finally {
+	    if (fd) {
+	      await promisify(fs.close)(fd).catch(
+	        /* istanbul ignore next */
+	        () => {}
+	      );
+	    }
+	    removeOnExitHandler();
+	    await promisify(fs.unlink)(tmpfile).catch(() => {});
+	    activeFiles[absoluteName].shift(); // remove the element added by serializeSameFile
+	    if (activeFiles[absoluteName].length > 0) {
+	      activeFiles[absoluteName][0](); // start next job if one is pending
+	    } else {
+	      delete activeFiles[absoluteName];
+	    }
+	  }
+	}
+
+	async function writeFile (filename, data, options, callback) {
+	  if (options instanceof Function) {
+	    callback = options;
+	    options = {};
+	  }
+
+	  const promise = writeFileAsync(filename, data, options);
+	  if (callback) {
+	    try {
+	      const result = await promise;
+	      return callback(result)
+	    } catch (err) {
+	      return callback(err)
+	    }
+	  }
+
+	  return promise
+	}
+
+	function writeFileSync (filename, data, options) {
+	  if (typeof options === 'string') {
+	    options = { encoding: options };
+	  } else if (!options) {
+	    options = {};
+	  }
+	  try {
+	    filename = fs.realpathSync(filename);
+	  } catch (ex) {
+	    // it's ok, it'll happen on a not yet existing file
+	  }
+	  const tmpfile = getTmpname(filename);
+
+	  if (!options.mode || !options.chown) {
+	    // Either mode or chown is not explicitly set
+	    // Default behavior is to copy it from original file
+	    try {
+	      const stats = fs.statSync(filename);
+	      options = Object.assign({}, options);
+	      if (!options.mode) {
+	        options.mode = stats.mode;
+	      }
+	      if (!options.chown && process.getuid) {
+	        options.chown = { uid: stats.uid, gid: stats.gid };
+	      }
+	    } catch (ex) {
+	      // ignore stat errors
+	    }
+	  }
+
+	  let fd;
+	  const cleanup = cleanupOnExit(tmpfile);
+	  const removeOnExitHandler = onExit(cleanup);
+
+	  let threw = true;
+	  try {
+	    fd = fs.openSync(tmpfile, 'w', options.mode || 0o666);
+	    if (options.tmpfileCreated) {
+	      options.tmpfileCreated(tmpfile);
+	    }
+	    if (ArrayBuffer.isView(data)) {
+	      fs.writeSync(fd, data, 0, data.length, 0);
+	    } else if (data != null) {
+	      fs.writeSync(fd, String(data), 0, String(options.encoding || 'utf8'));
+	    }
+	    if (options.fsync !== false) {
+	      fs.fsyncSync(fd);
+	    }
+
+	    fs.closeSync(fd);
+	    fd = null;
+
+	    if (options.chown) {
+	      try {
+	        fs.chownSync(tmpfile, options.chown.uid, options.chown.gid);
+	      } catch (err) {
+	        if (!isChownErrOk(err)) {
+	          throw err
+	        }
+	      }
+	    }
+
+	    if (options.mode) {
+	      try {
+	        fs.chmodSync(tmpfile, options.mode);
+	      } catch (err) {
+	        if (!isChownErrOk(err)) {
+	          throw err
+	        }
+	      }
+	    }
+
+	    fs.renameSync(tmpfile, filename);
+	    threw = false;
+	  } finally {
+	    if (fd) {
+	      try {
+	        fs.closeSync(fd);
+	      } catch (ex) {
+	        // ignore close errors at this stage, error may have closed fd already.
+	      }
+	    }
+	    removeOnExitHandler();
+	    if (threw) {
+	      cleanup();
+	    }
+	  }
+	}
+	return lib.exports;
+}
+
+var hasRequiredLocalStorage;
+
+function requireLocalStorage () {
+	if (hasRequiredLocalStorage) return LocalStorage;
+	hasRequiredLocalStorage = 1;
+	// Generated by CoffeeScript 2.7.0
+	(function() {
+	  var JSONStorage, KEY_FOR_EMPTY_STRING, LocalStorage$1, MetaKey, QUOTA_EXCEEDED_ERR, StorageEvent, _emptyDirectory, _escapeKey, _rm, createMap, events, fs, path, writeSync;
+
+	  path = require$$1$5;
+
+	  fs = require$$1;
+
+	  events = require$$4;
+
+	  writeSync = requireLib().sync;
+
+	  KEY_FOR_EMPTY_STRING = '---.EMPTY_STRING.---'; // Chose something that no one is likely to ever use
+
+	  _emptyDirectory = function(target) {
+	    var i, len, p, ref, results;
+	    ref = fs.readdirSync(target);
+	    results = [];
+	    for (i = 0, len = ref.length; i < len; i++) {
+	      p = ref[i];
+	      results.push(_rm(path.join(target, p)));
+	    }
+	    return results;
+	  };
+
+	  _rm = function(target) {
+	    if (fs.statSync(target).isDirectory()) {
+	      _emptyDirectory(target);
+	      return fs.rmdirSync(target);
+	    } else {
+	      return fs.unlinkSync(target);
+	    }
+	  };
+
+	  _escapeKey = function(key) {
+	    var newKey;
+	    if (key === '') {
+	      newKey = KEY_FOR_EMPTY_STRING;
+	    } else {
+	      newKey = `${key}`;
+	    }
+	    return newKey;
+	  };
+
+	  QUOTA_EXCEEDED_ERR = class QUOTA_EXCEEDED_ERR extends Error {
+	    constructor(message = 'Unknown error.') {
+	      super();
+	      this.message = message;
+	      if (Error.captureStackTrace != null) {
+	        Error.captureStackTrace(this, this.constructor);
+	      }
+	      this.name = this.constructor.name;
+	    }
+
+	    toString() {
+	      return `${this.name}: ${this.message}`;
+	    }
+
+	  };
+
+	  StorageEvent = class StorageEvent {
+	    constructor(key1, oldValue1, newValue1, url, storageArea = 'localStorage') {
+	      this.key = key1;
+	      this.oldValue = oldValue1;
+	      this.newValue = newValue1;
+	      this.url = url;
+	      this.storageArea = storageArea;
+	    }
+
+	  };
+
+	  MetaKey = class MetaKey { // MetaKey contains key and size
+	    constructor(key1, index1) {
+	      this.key = key1;
+	      this.index = index1;
+	      if (!(this instanceof MetaKey)) {
+	        return new MetaKey(this.key, this.index);
+	      }
+	    }
+
+	  };
+
+	  createMap = function() { // createMap contains Metakeys as properties
+	    var Map;
+	    Map = function() {};
+	    Map.prototype = Object.create(null);
+	    return new Map();
+	  };
+
+	  LocalStorage$1 = (function() {
+	    var instanceMap;
+
+	    class LocalStorage extends events.EventEmitter {
+	      constructor(_location, quota = 5 * 1024 * 1024) {
+	        var handler;
+	        super();
+	        this._location = _location;
+	        this.quota = quota;
+	        // super(_location, quota)
+	        // @_location = _location
+	        // @quota = quota
+	        if (!(this instanceof LocalStorage)) {
+	          return new LocalStorage(this._location, this.quota);
+	        }
+	        this._location = path.resolve(this._location);
+	        if (instanceMap[this._location] != null) {
+	          return instanceMap[this._location];
+	        }
+	        this.length = 0; // !TODO: Maybe change this to a property with __defineProperty__
+	        this._bytesInUse = 0;
+	        this._keys = [];
+	        this._metaKeyMap = createMap();
+	        this._eventUrl = "pid:" + process.pid;
+	        this._init();
+	        this._QUOTA_EXCEEDED_ERR = QUOTA_EXCEEDED_ERR;
+	        if (typeof Proxy !== "undefined" && Proxy !== null) {
+	          handler = {
+	            set: (receiver, key, value) => {
+	              if (this[key] != null) {
+	                this[key] = value;
+	              } else {
+	                this.setItem(key, value);
+	              }
+	              return true;
+	            },
+	            get: (receiver, key) => {
+	              if (this[key] != null) {
+	                return this[key];
+	              } else {
+	                return this.getItem(key);
+	              }
+	            },
+	            ownKeys: (target) => {
+	              return this._keys.map(function(k) {
+	                if (k === KEY_FOR_EMPTY_STRING) {
+	                  return '';
+	                } else {
+	                  return k;
+	                }
+	              });
+	            },
+	            getOwnPropertyDescriptor: (target, key) => {
+	              return {
+	                value: this[key],
+	                enumerable: true,
+	                configurable: true
+	              };
+	            }
+	          };
+	          instanceMap[this._location] = new Proxy(this, handler);
+	          return instanceMap[this._location];
+	        }
+	        // else it'll return this
+	        instanceMap[this._location] = this;
+	        return instanceMap[this._location];
+	      }
+
+	      _init() {
+	        var e, stat;
+	        try {
+	          stat = fs.statSync(this._location);
+	          if ((stat != null) && !stat.isDirectory()) {
+	            throw new Error(`A file exists at the location '${this._location}' when trying to create/open localStorage`);
+	          }
+	          // At this point, it exists and is definitely a directory. So read it.
+	          this._sync();
+	        } catch (error) {
+	          e = error;
+	          // If it errors, that might mean it didn't exist, so try to create it
+	          if (e.code !== "ENOENT") {
+	            throw e;
+	          }
+	          try {
+	            fs.mkdirSync(this._location, {
+	              recursive: true
+	            });
+	          } catch (error) {
+	            e = error;
+	            if (e.code !== "EEXIST") {
+	              throw e;
+	            }
+	          }
+	        }
+	      }
+
+	      _sync() {
+	        var _MetaKey, _decodedKey, _keys, i, index, k, len, stat;
+	        this._bytesInUse = 0;
+	        this.length = 0;
+	        _keys = fs.readdirSync(this._location);
+	        for (index = i = 0, len = _keys.length; i < len; index = ++i) {
+	          k = _keys[index];
+	          _decodedKey = decodeURIComponent(k);
+	          this._keys.push(_decodedKey);
+	          _MetaKey = new MetaKey(k, index);
+	          this._metaKeyMap[_decodedKey] = _MetaKey;
+	          stat = this._getStat(k);
+	          if ((stat != null ? stat.size : undefined) != null) {
+	            _MetaKey.size = stat.size;
+	            this._bytesInUse += stat.size;
+	          }
+	        }
+	        return this.length = _keys.length;
+	      }
+
+	      setItem(key, value) {
+	        var encodedKey, evnt, existsBeforeSet, filename, hasListeners, metaKey, oldLength, oldValue, valueString, valueStringLength;
+	        hasListeners = this.listenerCount('storage');
+	        oldValue = null;
+	        if (hasListeners) {
+	          oldValue = this.getItem(key);
+	        }
+	        key = _escapeKey(key);
+	        encodedKey = encodeURIComponent(key).replace(/[!'()]/g, escape).replace(/\*/g, "%2A");
+	        filename = path.join(this._location, encodedKey);
+	        valueString = `${value}`;
+	        valueStringLength = valueString.length;
+	        metaKey = this._metaKeyMap[key];
+	        existsBeforeSet = !!metaKey;
+	        if (existsBeforeSet) {
+	          oldLength = metaKey.size;
+	        } else {
+	          oldLength = 0;
+	        }
+	        if (this._bytesInUse - oldLength + valueStringLength > this.quota) {
+	          throw new QUOTA_EXCEEDED_ERR();
+	        }
+	        writeSync(filename, valueString, {
+	          encoding: 'utf8'
+	        });
+	        if (!existsBeforeSet) {
+	          metaKey = new MetaKey(encodedKey, (this._keys.push(key)) - 1);
+	          metaKey.size = valueStringLength;
+	          this._metaKeyMap[key] = metaKey;
+	          this.length += 1;
+	          this._bytesInUse += valueStringLength;
+	        }
+	        if (hasListeners) {
+	          evnt = new StorageEvent(key, oldValue, value, this._eventUrl);
+	          return this.emit('storage', evnt);
+	        }
+	      }
+
+	      getItem(key) {
+	        var filename, metaKey;
+	        key = _escapeKey(key);
+	        metaKey = this._metaKeyMap[key];
+	        if (!!metaKey) {
+	          filename = path.join(this._location, metaKey.key);
+	          return fs.readFileSync(filename, 'utf8');
+	        } else {
+	          return null;
+	        }
+	      }
+
+	      _getStat(key) {
+	        var filename;
+	        key = _escapeKey(key);
+	        filename = path.join(this._location, encodeURIComponent(key));
+	        try {
+	          return fs.statSync(filename);
+	        } catch (error) {
+	          return null;
+	        }
+	      }
+
+	      removeItem(key) {
+	        var evnt, filename, hasListeners, k, meta, metaKey, oldValue, ref;
+	        key = _escapeKey(key);
+	        metaKey = this._metaKeyMap[key];
+	        if (!!metaKey) {
+	          hasListeners = this.listenerCount('storage');
+	          oldValue = null;
+	          if (hasListeners) {
+	            oldValue = this.getItem(key);
+	          }
+	          delete this._metaKeyMap[key];
+	          this.length -= 1;
+	          this._bytesInUse -= metaKey.size;
+	          filename = path.join(this._location, metaKey.key);
+	          this._keys.splice(metaKey.index, 1);
+	          ref = this._metaKeyMap;
+	          for (k in ref) {
+	            ref[k];
+	            meta = this._metaKeyMap[k];
+	            if (meta.index > metaKey.index) {
+	              meta.index -= 1;
+	            }
+	          }
+	          _rm(filename);
+	          if (hasListeners) {
+	            evnt = new StorageEvent(key, oldValue, null, this._eventUrl);
+	            return this.emit('storage', evnt);
+	          }
+	        }
+	      }
+
+	      key(n) {
+	        var rawKey;
+	        rawKey = this._keys[n];
+	        if (rawKey === KEY_FOR_EMPTY_STRING) {
+	          return '';
+	        } else {
+	          return rawKey;
+	        }
+	      }
+
+	      clear() {
+	        var evnt;
+	        _emptyDirectory(this._location);
+	        this._metaKeyMap = createMap();
+	        this._keys = [];
+	        this.length = 0;
+	        this._bytesInUse = 0;
+	        if (this.listenerCount('storage')) {
+	          evnt = new StorageEvent(null, null, null, this._eventUrl);
+	          return this.emit('storage', evnt);
+	        }
+	      }
+
+	      _getBytesInUse() {
+	        return this._bytesInUse;
+	      }
+
+	      _deleteLocation() {
+	        delete instanceMap[this._location];
+	        _rm(this._location);
+	        this._metaKeyMap = {};
+	        this._keys = [];
+	        this.length = 0;
+	        return this._bytesInUse = 0;
+	      }
+
+	    }
+	    instanceMap = {};
+
+	    return LocalStorage;
+
+	  }).call(this);
+
+	  JSONStorage = class JSONStorage extends LocalStorage$1 {
+	    setItem(key, value) {
+	      var newValue;
+	      newValue = JSON.stringify(value);
+	      return super.setItem(key, newValue);
+	    }
+
+	    getItem(key) {
+	      return JSON.parse(super.getItem(key));
+	    }
+
+	  };
+
+	  LocalStorage.LocalStorage = LocalStorage$1;
+
+	  LocalStorage.JSONStorage = JSONStorage;
+
+	  LocalStorage.QUOTA_EXCEEDED_ERR = QUOTA_EXCEEDED_ERR;
+
+	}).call(LocalStorage);
+	return LocalStorage;
+}
+
+var LocalStorageExports = requireLocalStorage();
+
 /**
  * The main function for the action.
  *
@@ -27453,11 +28592,20 @@ async function run() {
         // install globus-compute-sdk if not already installed
         execSync('gc_installed=$(pip freeze | grep globus-compute-sdk | wc -l) &&' +
             ' if [ ${gc_installed} -lt 1 ]; then pip install globus-compute-sdk; fi;');
-        const token = await getToken(CLIENT_ID, CLIENT_SECRET);
-        const batch_res = await submit_tasks(token.access_token, endpoint_uuid, function_uuid, args, kwargs);
+        const localStorage = new LocalStorageExports.LocalStorage('./tmp');
+        let access_token;
+        if (localStorage.getItem('access-token') === null) {
+            const token = await getToken(CLIENT_ID, CLIENT_SECRET);
+            localStorage.setItem('access-token', token.access_token);
+            access_token = token.access_token;
+        }
+        else {
+            access_token = localStorage.getItem('access-token');
+        }
+        const batch_res = await submit_tasks(access_token, endpoint_uuid, function_uuid, args, kwargs);
         const keys = Object.keys(batch_res.tasks)[0];
         const task_uuid = batch_res.tasks[keys][0];
-        const response = await check_status(token.access_token, task_uuid);
+        const response = await check_status(access_token, task_uuid);
         coreExports.setOutput('response', response);
         if (response.status === 'success') {
             let data = response.result;

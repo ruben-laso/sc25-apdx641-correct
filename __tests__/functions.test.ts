@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { wait } from '../__fixtures__/wait.js'
 import { getToken, submit_tasks, check_status } from '../src/functions.js'
 import { TaskStatusResponse, TaskSubmission, Token } from '../src/interfaces.js'
+import { LocalStorage } from 'node-localstorage'
 //import { Token, TaskStatusResponse, TaskSubmission } from '../src/interfaces.js'
 
 jest.unstable_mockModule('../src/wait.js', () => ({ wait }))
@@ -39,6 +40,11 @@ describe('functions.ts', () => {
   })
   afterEach(() => {
     jest.restoreAllMocks()
+  })
+
+  afterAll(() => {
+    const localStorage = new LocalStorage('./tmp')
+    localStorage.removeItem('access-token')
   })
 
   const endpoint_uuid = uuidv4()

@@ -2,6 +2,7 @@ import * as core from '@actions/core'
 import { Token } from './interfaces.js'
 import { getToken, submit_tasks, check_status } from './functions.js'
 import { execSync } from 'child_process'
+import { LocalStorage } from 'node-localstorage'
 
 /**
  * The main function for the action.
@@ -24,9 +25,19 @@ export async function run(): Promise<void> {
         ' if [ ${gc_installed} -lt 1 ]; then pip install globus-compute-sdk; fi;'
     )
 
-    const token: Token = await getToken(CLIENT_ID, CLIENT_SECRET)
+    const localStorage = new LocalStorage('./tmp')
+    let access_token: string | null
+
+    if (localStorage.getItem('access-token') === null) {
+      const token: Token = await getToken(CLIENT_ID, CLIENT_SECRET)
+      localStorage.setItem('access-token', token.access_token)
+      access_token = token.access_token
+    } else {
+      access_token = localStorage.getItem('access-token')
+    }
+
     const batch_res = await submit_tasks(
-      token.access_token,
+      access_token,
       endpoint_uuid,
       function_uuid,
       args,
@@ -34,7 +45,7 @@ export async function run(): Promise<void> {
     )
     const keys: string = Object.keys(batch_res.tasks)[0]
     const task_uuid: string = batch_res.tasks[keys as keyof object][0]
-    const response = await check_status(token.access_token, task_uuid)
+    const response = await check_status(access_token, task_uuid)
 
     core.setOutput('response', response)
 
