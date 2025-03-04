@@ -1,9 +1,7 @@
 import { Token, TaskStatusResponse, TaskSubmission } from './interfaces.js'
-import { wait } from './wait.js'
+import { exponential_decay } from './decay.js'
 import { Buffer } from 'buffer'
 import { validate as isValidUUID } from 'uuid'
-
-const timeout = 5000
 
 /**
  * Retrieve bearer tokens from Globus Auth
@@ -165,7 +163,7 @@ export function check_status(
         (await response.json()) as TaskStatusResponse
 
       if (['success', 'failed'].indexOf(results.status.toLowerCase()) == -1) {
-        await wait(timeout)
+        await exponential_decay()
 
         // just to enable testing.
         if (results.task_id === 'testing') {

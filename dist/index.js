@@ -27246,6 +27246,8 @@ function requireCore () {
 
 var coreExports = requireCore();
 
+const START_TIME = Date.now();
+
 /**
  * Waits for a number of milliseconds.
  *
@@ -27259,6 +27261,32 @@ async function wait(milliseconds) {
         setTimeout(() => resolve('done!'), milliseconds);
     });
 }
+/**
+ * Exponentially increasing wait time.
+ *
+ * @returns Resolves with 'done!' after the wait is over.
+ */
+async function exponential_decay() {
+    const runtime = Date.now() - START_TIME;
+    console.log(START_TIME);
+    if (runtime < 5000) {
+        // less that 5s
+        return wait(5000);
+    }
+    else if (runtime < 60000) {
+        // less than 1m
+        return wait(15000);
+    }
+    else if (runtime < 600000) {
+        // less than 10m
+        return wait(30000);
+    }
+    else if (runtime < 3600000) {
+        // less than 1hr
+        return wait(60000);
+    }
+    return wait(300000); // greater than 1hr
+}
 
 var REGEX = /^(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$/i;
 
@@ -27266,7 +27294,6 @@ function validate(uuid) {
     return typeof uuid === 'string' && REGEX.test(uuid);
 }
 
-const timeout = 5000;
 /**
  * Retrieve bearer tokens from Globus Auth
  *
@@ -27388,7 +27415,7 @@ function check_status(access_token, task_uuid) {
             }
             const results = (await response.json());
             if (['success', 'failed'].indexOf(results.status.toLowerCase()) == -1) {
-                await wait(timeout);
+                await exponential_decay();
                 // just to enable testing.
                 if (results.task_id === 'testing') {
                     return results;
