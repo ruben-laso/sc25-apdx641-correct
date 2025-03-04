@@ -27289,7 +27289,6 @@ async function exponential_decay() {
     else {
         delay = 300000;
     }
-    console.log('the delay: ' + delay);
     return wait(delay); // greater than 1hr
 }
 
