@@ -2,7 +2,7 @@ import * as core from '@actions/core'
 import { Token } from './interfaces.js'
 import { getToken, submit_tasks, check_status } from './functions.js'
 import { execSync } from 'child_process'
-import { LocalStorage } from 'node-localstorage'
+// import { LocalStorage } from 'node-localstorage'
 
 /**
  * The main function for the action.
@@ -25,16 +25,18 @@ export async function run(): Promise<void> {
         ' if [ ${gc_installed} -lt 1 ]; then pip install globus-compute-sdk; fi;'
     )
 
-    const localStorage = new LocalStorage('./tmp')
-    let access_token: string | null
+    // const localStorage = new LocalStorage('./tmp')
+    // let access_token: string | null
 
-    if (localStorage.getItem('access-token') === null) {
-      const token: Token = await getToken(CLIENT_ID, CLIENT_SECRET)
-      localStorage.setItem('access-token', token.access_token)
-      access_token = token.access_token
-    } else {
-      access_token = localStorage.getItem('access-token')
-    }
+    // if (localStorage.getItem('access-token') === null) {
+    //   const token: Token = await getToken(CLIENT_ID, CLIENT_SECRET)
+    //   localStorage.setItem('access-token', token.access_token)
+    //   access_token = token.access_token
+    // } else {
+    //   access_token = localStorage.getItem('access-token')
+    // }
+    const token: Token = await getToken(CLIENT_ID, CLIENT_SECRET)
+    const access_token = token.access_token
 
     const batch_res = await submit_tasks(
       access_token,
