@@ -10,7 +10,7 @@ import jest from 'eslint-plugin-jest'
 import prettier from 'eslint-plugin-prettier'
 import globals from 'globals'
 import path from 'node:path'
-import { fileURLToPath } from 'node:url'
+import { fileURLToPath } from 'url'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
