@@ -27489,11 +27489,13 @@ async function run() {
         const cache = new Cache('./tmp');
         let access_token;
         if ((await cache.get('access-token')) == null) {
+            console.log('Token not cached. Requesting new token');
             const token = await getToken(CLIENT_ID, CLIENT_SECRET);
             await cache.set('access-token', token.access_token);
             access_token = token.access_token;
         }
         else {
+            console.log('Reusing existing token');
             access_token = await cache.get('access-token');
         }
         const token = await getToken(CLIENT_ID, CLIENT_SECRET);
