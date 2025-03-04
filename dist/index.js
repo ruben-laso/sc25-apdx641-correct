@@ -1,7 +1,8 @@
 import require$$0 from 'os';
 import require$$0$1 from 'crypto';
 import require$$1 from 'fs';
-import require$$1$5 from 'path';
+import * as path from 'path';
+import path__default from 'path';
 import require$$2 from 'http';
 import require$$3 from 'https';
 import require$$0$4 from 'net';
@@ -27,6 +28,7 @@ import require$$6 from 'string_decoder';
 import require$$0$9 from 'diagnostics_channel';
 import require$$2$2, { execSync } from 'child_process';
 import require$$6$1 from 'timers';
+import fs from 'node:fs/promises';
 
 var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
@@ -25506,7 +25508,7 @@ function requirePathUtils () {
 	};
 	Object.defineProperty(pathUtils, "__esModule", { value: true });
 	pathUtils.toPlatformPath = pathUtils.toWin32Path = pathUtils.toPosixPath = undefined;
-	const path = __importStar(require$$1$5);
+	const path = __importStar(path__default);
 	/**
 	 * toPosixPath converts the given path to the posix form. On Windows, \\ will be
 	 * replaced with /.
@@ -25593,7 +25595,7 @@ function requireIoUtil () {
 		Object.defineProperty(exports, "__esModule", { value: true });
 		exports.getCmdPath = exports.tryGetExecutablePath = exports.isRooted = exports.isDirectory = exports.exists = exports.READONLY = exports.UV_FS_O_EXLOCK = exports.IS_WINDOWS = exports.unlink = exports.symlink = exports.stat = exports.rmdir = exports.rm = exports.rename = exports.readlink = exports.readdir = exports.open = exports.mkdir = exports.lstat = exports.copyFile = exports.chmod = undefined;
 		const fs = __importStar(require$$1);
-		const path = __importStar(require$$1$5);
+		const path = __importStar(path__default);
 		_a = fs.promises
 		// export const {open} = 'fs'
 		, exports.chmod = _a.chmod, exports.copyFile = _a.copyFile, exports.lstat = _a.lstat, exports.mkdir = _a.mkdir, exports.open = _a.open, exports.readdir = _a.readdir, exports.readlink = _a.readlink, exports.rename = _a.rename, exports.rm = _a.rm, exports.rmdir = _a.rmdir, exports.stat = _a.stat, exports.symlink = _a.symlink, exports.unlink = _a.unlink;
@@ -25783,7 +25785,7 @@ function requireIo () {
 	Object.defineProperty(io, "__esModule", { value: true });
 	io.findInPath = io.which = io.mkdirP = io.rmRF = io.mv = io.cp = undefined;
 	const assert_1 = require$$0$3;
-	const path = __importStar(require$$1$5);
+	const path = __importStar(path__default);
 	const ioUtil = __importStar(requireIoUtil());
 	/**
 	 * Copies a file or folder.
@@ -26091,7 +26093,7 @@ function requireToolrunner () {
 	const os = __importStar(require$$0);
 	const events = __importStar(require$$4);
 	const child = __importStar(require$$2$2);
-	const path = __importStar(require$$1$5);
+	const path = __importStar(path__default);
 	const io = __importStar(requireIo());
 	const ioUtil = __importStar(requireIoUtil());
 	const timers_1 = require$$6$1;
@@ -26935,7 +26937,7 @@ function requireCore () {
 		const file_command_1 = requireFileCommand();
 		const utils_1 = requireUtils$1();
 		const os = __importStar(require$$0);
-		const path = __importStar(require$$1$5);
+		const path = __importStar(path__default);
 		const oidc_utils_1 = requireOidcUtils();
 		/**
 		 * The code to exit an action
@@ -27436,7 +27438,39 @@ function check_status(access_token, task_uuid) {
     return wait_for_ep();
 }
 
-// import { LocalStorage } from 'node-localstorage'
+class Cache {
+    dir;
+    constructor(dir) {
+        this.dir = path.resolve(dir);
+        fs.mkdir(this.dir, { recursive: true });
+    }
+    async set(key, value) {
+        const key_path = path.join(this.dir, key);
+        await fs.writeFile(key_path, value);
+        return Promise.resolve(key_path);
+    }
+    async get(key) {
+        const key_path = path.join(this.dir, key);
+        try {
+            const value = (await fs.readFile(key_path)).toString('utf-8');
+            return Promise.resolve(value);
+        }
+        catch (error) {
+            console.log(error);
+            return null;
+        }
+    }
+    async remove(key) {
+        const key_path = path.join(this.dir, key);
+        try {
+            await fs.rm(key_path);
+        }
+        catch (error) {
+            console.debug(error);
+        }
+    }
+}
+
 /**
  * The main function for the action.
  *
@@ -27453,17 +27487,18 @@ async function run() {
         // install globus-compute-sdk if not already installed
         execSync('gc_installed=$(pip freeze | grep globus-compute-sdk | wc -l) &&' +
             ' if [ ${gc_installed} -lt 1 ]; then pip install globus-compute-sdk; fi;');
-        // const localStorage = new LocalStorage('./tmp')
-        // let access_token: string | null
-        // if (localStorage.getItem('access-token') === null) {
-        //   const token: Token = await getToken(CLIENT_ID, CLIENT_SECRET)
-        //   localStorage.setItem('access-token', token.access_token)
-        //   access_token = token.access_token
-        // } else {
-        //   access_token = localStorage.getItem('access-token')
-        // }
+        const cache = new Cache('./tmp');
+        let access_token;
+        if ((await cache.get('access-token')) == null) {
+            const token = await getToken(CLIENT_ID, CLIENT_SECRET);
+            await cache.set('access-token', token.access_token);
+            access_token = token.access_token;
+        }
+        else {
+            access_token = await cache.get('access-token');
+        }
         const token = await getToken(CLIENT_ID, CLIENT_SECRET);
-        const access_token = token.access_token;
+        access_token = token.access_token;
         const batch_res = await submit_tasks(access_token, endpoint_uuid, function_uuid, args, kwargs);
         const keys = Object.keys(batch_res.tasks)[0];
         const task_uuid = batch_res.tasks[keys][0];

@@ -10,7 +10,7 @@ import * as core from '../__fixtures__/core.js'
 import { wait } from '../__fixtures__/wait.js'
 import * as gcf from '../__fixtures__/functions.js'
 import * as cp from '../__fixtures__/child_process'
-import { LocalStorage } from 'node-localstorage'
+import { Cache } from '../src/cache.js'
 
 // Mocks should be declared before the module being tested is imported.
 jest.unstable_mockModule('@actions/core', () => core)
@@ -21,6 +21,8 @@ jest.unstable_mockModule('child_process', () => cp)
 // The module being tested should be imported dynamically. This ensures that the
 // mocks are used in place of any actual dependencies.
 const { run } = await import('../src/main.js')
+
+const cache = new Cache('./tmp')
 
 let output = {
   task_id: 't1',
@@ -78,6 +80,8 @@ describe('main.ts', () => {
 
   afterEach(() => {
     jest.resetAllMocks()
+
+    cache.remove('access-token')
   })
 
   it('Check that main function runs with inputs', async () => {
@@ -129,10 +133,7 @@ describe('main.ts', () => {
   })
 
   it('Remove cache and unset getToken mock', async () => {
-    const localStorage = new LocalStorage('./tmp')
-
-    localStorage.removeItem('access-token')
-
+    // cache.set('access-token', 2)
     gcf.getToken
       .mockClear()
       .mockRejectedValueOnce(new Error('function execution did not pass'))
