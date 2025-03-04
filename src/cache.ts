@@ -24,7 +24,7 @@ export class Cache {
     try {
       const value: string = (await fs.readFile(key_path)).toString('utf-8')
       return Promise.resolve(value)
-    } catch (error) {
+    } catch {
       return null
     }
   }
