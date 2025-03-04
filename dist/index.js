@@ -27261,6 +27261,7 @@ async function wait(milliseconds) {
         setTimeout(() => resolve('done!'), milliseconds);
     });
 }
+
 /**
  * Exponentially increasing wait time.
  *
@@ -27268,24 +27269,28 @@ async function wait(milliseconds) {
  */
 async function exponential_decay() {
     const runtime = Date.now() - START_TIME;
-    console.log(START_TIME);
+    let delay = 0;
     if (runtime < 5000) {
         // less that 5s
-        return wait(5000);
+        delay = 5000;
     }
     else if (runtime < 60000) {
         // less than 1m
-        return wait(15000);
+        delay = 15000;
     }
     else if (runtime < 600000) {
         // less than 10m
-        return wait(30000);
+        delay = 30000;
     }
     else if (runtime < 3600000) {
         // less than 1hr
-        return wait(60000);
+        delay = 60000;
     }
-    return wait(300000); // greater than 1hr
+    else {
+        delay = 300000;
+    }
+    console.log('the delay: ' + delay);
+    return wait(delay); // greater than 1hr
 }
 
 var REGEX = /^(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$/i;

@@ -1,5 +1,5 @@
 import { START_TIME } from './constants.js'
-import { wait as wait} from './wait.js'
+import { wait as wait } from './wait.js'
 
 /**
  * Exponentially increasing wait time.
@@ -8,17 +8,17 @@ import { wait as wait} from './wait.js'
  */
 export async function exponential_decay(): Promise<string> {
   const runtime = Date.now() - START_TIME
-  let delay = 0;
+  let delay = 0
 
   if (runtime < 5000) {
     // less that 5s
-    delay = 5000;
+    delay = 5000
   } else if (runtime < 60000) {
     // less than 1m
-    delay = 15000;
+    delay = 15000
   } else if (runtime < 600000) {
     // less than 10m
-    delay = 30000;
+    delay = 30000
   } else if (runtime < 3600000) {
     // less than 1hr
     delay = 60000
