@@ -27488,7 +27488,7 @@ async function run() {
         // install globus-compute-sdk if not already installed
         execSync('gc_installed=$(pip freeze | grep globus-compute-sdk | wc -l) &&' +
             ' if [ ${gc_installed} -lt 1 ]; then pip install globus-compute-sdk; fi;');
-        const cache = new Cache('./tmp');
+        const cache = new Cache('/tmp');
         let access_token = await cache.get('access-token');
         console.log(access_token);
         if ((await cache.get('access-token')) == null) {

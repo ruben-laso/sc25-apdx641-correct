@@ -22,7 +22,7 @@ jest.unstable_mockModule('child_process', () => cp)
 // mocks are used in place of any actual dependencies.
 const { run } = await import('../src/main.js')
 
-const cache = new Cache('./tmp')
+const cache = new Cache('/tmp')
 
 let output = {
   task_id: 't1',
