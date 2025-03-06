@@ -27418,18 +27418,18 @@ function check_status(access_token, task_uuid) {
     });
     const wait_for_ep = async function () {
         while (true) {
+            await exponential_decay();
             console.log('Issuing request' + url);
             const response = await fetch(request);
             if (!response.ok) {
                 throw new Error(await response.text());
             }
             const results = (await response.json());
-            if (['success', 'failed'].indexOf(results.status.toLowerCase()) == -1) {
-                await exponential_decay();
-                // just to enable testing.
-                if (results.task_id === 'testing') {
-                    return results;
-                }
+            // just for testing
+            if (['success', 'failed'].indexOf(results.status.toLowerCase()) == -1 &&
+                results.task_id === 'testing') {
+                return results;
+                //  }
             }
             else if (results.status === 'failed') {
                 throw new Error(results.exception);

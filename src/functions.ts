@@ -157,6 +157,7 @@ export function check_status(
 
   const wait_for_ep = async function (): Promise<TaskStatusResponse> {
     while (true) {
+      await exponential_decay()
       console.log('Issuing request' + url)
       const response: Response = await fetch(request)
       if (!response.ok) {
@@ -166,13 +167,13 @@ export function check_status(
       const results: TaskStatusResponse =
         (await response.json()) as TaskStatusResponse
 
-      if (['success', 'failed'].indexOf(results.status.toLowerCase()) == -1) {
-        await exponential_decay()
-
-        // just to enable testing.
-        if (results.task_id === 'testing') {
-          return results
-        }
+      // just for testing
+      if (
+        ['success', 'failed'].indexOf(results.status.toLowerCase()) == -1 &&
+        results.task_id === 'testing'
+      ) {
+        return results
+        //  }
       } else if (results.status === 'failed') {
         throw new Error(results.exception)
       } else {

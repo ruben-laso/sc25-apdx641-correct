@@ -36,6 +36,13 @@ const failedText = 'The fetch operation was unsuccessful.'
 describe('functions.ts', () => {
   beforeEach(() => {
     wait.mockImplementation(() => Promise.resolve('done!'))
+
+    jest.spyOn(global, 'setTimeout').mockImplementation((callback) => {
+      if (typeof callback === 'function') {
+        callback()
+      }
+      return { hasRef: () => false } as NodeJS.Timeout
+    })
   })
   afterEach(() => {
     jest.restoreAllMocks()
