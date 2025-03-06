@@ -32,7 +32,7 @@ export function getToken(
     grant_type: gcgrant_type
   }).toString()
 
-  console.log('Issuing request' + url)
+  console.log('Issuing request: ' + url)
   const request: Request = new Request(url, {
     method: 'POST',
     headers: headers
@@ -108,7 +108,7 @@ export function submit_tasks(
     'content-length': content_len.toString()
   }).toString()
 
-  console.log('Issuing request' + url)
+  console.log('Issuing request: ' + url)
   const request: Request = new Request(url, {
     method: 'POST',
     headers: headers,
@@ -149,7 +149,7 @@ export function check_status(
     'https://compute.api.globus.org'
   )
 
-  console.log('Issuing request' + url)
+  // console.log('Issuing request' + url)
   const request: Request = new Request(url, {
     method: 'GET',
     headers: headers
@@ -158,7 +158,7 @@ export function check_status(
   const wait_for_ep = async function (): Promise<TaskStatusResponse> {
     while (true) {
       await exponential_decay()
-      console.log('Issuing request' + url)
+      console.log('Issuing request : ' + url)
       const response: Response = await fetch(request)
       if (!response.ok) {
         throw new Error(await response.text())

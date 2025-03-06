@@ -27321,7 +27321,7 @@ function getToken(CLIENT_ID, CLIENT_SECRET) {
         scope: gcscope,
         grant_type: gcgrant_type
     }).toString();
-    console.log('Issuing request' + url);
+    console.log('Issuing request: ' + url);
     const request = new Request(url, {
         method: 'POST',
         headers: headers
@@ -27380,7 +27380,7 @@ function submit_tasks(access_token, endpoint_uuid, function_uuid, args, kwargs) 
         endpoint_uuid: endpoint_uuid,
         'content-length': content_len.toString()
     }).toString();
-    console.log('Issuing request' + url);
+    console.log('Issuing request: ' + url);
     const request = new Request(url, {
         method: 'POST',
         headers: headers,
@@ -27411,7 +27411,7 @@ function check_status(access_token, task_uuid) {
     headers.set('Content-Type', 'application/json');
     headers.set('Authorization', `Bearer ${access_token}`);
     const url = new URL(`/v2/tasks/${task_uuid}`, 'https://compute.api.globus.org');
-    console.log('Issuing request' + url);
+    // console.log('Issuing request' + url)
     const request = new Request(url, {
         method: 'GET',
         headers: headers
@@ -27419,7 +27419,7 @@ function check_status(access_token, task_uuid) {
     const wait_for_ep = async function () {
         while (true) {
             await exponential_decay();
-            console.log('Issuing request' + url);
+            console.log('Issuing request : ' + url);
             const response = await fetch(request);
             if (!response.ok) {
                 throw new Error(await response.text());
