@@ -81,7 +81,6 @@ describe('main.ts', () => {
   afterEach(() => {
     jest.resetAllMocks()
 
-    cache.remove('access-token')
   })
 
   it('Check that main function runs with inputs', async () => {
@@ -133,7 +132,7 @@ describe('main.ts', () => {
   })
 
   it('Remove cache and unset getToken mock', async () => {
-    // cache.set('access-token', 2)
+    await cache.remove('access-token')
     gcf.getToken
       .mockClear()
       .mockRejectedValueOnce(new Error('function execution did not pass'))

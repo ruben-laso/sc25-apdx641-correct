@@ -18,7 +18,7 @@ export class Cache {
     return Promise.resolve(key_path)
   }
 
-  public async get(key: string): Promise<string | null | undefined> {
+  public async get(key: string): Promise<string | null> {
     const key_path: string = path.join(this.dir, key)
 
     try {
@@ -35,7 +35,8 @@ export class Cache {
     try {
       await fs.rm(key_path)
     } catch (error) {
-      console.debug(error)
+      // console.debug(error)
+      return;
     }
   }
 }

@@ -38,8 +38,6 @@ export async function run(): Promise<void> {
       console.log('Reusing existing token')
       access_token = await cache.get('access-token')
     }
-    const token: Token = await getToken(CLIENT_ID, CLIENT_SECRET)
-    access_token = token.access_token
 
     const batch_res = await submit_tasks(
       access_token,
