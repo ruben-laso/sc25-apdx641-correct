@@ -80,7 +80,6 @@ describe('main.ts', () => {
 
   afterEach(() => {
     jest.resetAllMocks()
-
   })
 
   it('Check that main function runs with inputs', async () => {

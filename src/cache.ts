@@ -35,8 +35,8 @@ export class Cache {
     try {
       await fs.rm(key_path)
     } catch (error) {
-      // console.debug(error)
-      return;
+      console.debug(error)
+      return
     }
   }
 }
