@@ -167,9 +167,7 @@ export function check_status(
       const results: TaskStatusResponse =
         (await response.json()) as TaskStatusResponse
 
-      console.log(
-        'Result value: ' + results.result + ' -  Status:' + results.status
-      )
+      console.log('Result status:' + results.status)
       // just for testing
       if (
         ['success', 'failed'].indexOf(results.status.toLowerCase()) == -1 &&
