@@ -9,10 +9,7 @@ export class Cache {
     fs.mkdir(this.dir, { recursive: true })
   }
 
-  public async set(
-    key: string,
-    value: string
-  ): Promise<string | null | undefined> {
+  public async set(key: string, value: string): Promise<string> {
     const key_path: string = path.join(this.dir, key)
     await fs.writeFile(key_path, value)
     return Promise.resolve(key_path)

@@ -27490,7 +27490,6 @@ async function run() {
             ' if [ ${gc_installed} -lt 1 ]; then pip install globus-compute-sdk; fi;');
         const cache = new Cache('/tmp');
         let access_token = await cache.get('access-token');
-        console.log(access_token);
         if ((await cache.get('access-token')) == null) {
             console.log('Token not cached. Requesting new token');
             const token = await getToken(CLIENT_ID, CLIENT_SECRET);
