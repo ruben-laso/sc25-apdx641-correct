@@ -24,7 +24,7 @@ const InvalidTaskSubmissionResponse: TaskSubmission = {
 
 const StatusResponse: TaskStatusResponse = {
   task_id: 'tid111',
-  status: 'Success',
+  status: 'success',
   result: 'Operation successful',
   completion_t: '100',
   exception: 'Failed task',

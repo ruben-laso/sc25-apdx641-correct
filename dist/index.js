@@ -27425,7 +27425,7 @@ function check_status(access_token, task_uuid) {
                 throw new Error(await response.text());
             }
             const results = (await response.json());
-            console.log('Result value: ' + results);
+            console.log('Result value: ' + results.result + ' -  Status:' + results.status);
             // just for testing
             if (['success', 'failed'].indexOf(results.status.toLowerCase()) == -1 &&
                 results.task_id === 'testing') {
@@ -27435,7 +27435,7 @@ function check_status(access_token, task_uuid) {
             else if (results.status === 'failed') {
                 throw new Error(results.exception);
             }
-            else {
+            else if (results.status === 'success') {
                 return results;
             }
         }
