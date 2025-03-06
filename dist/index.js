@@ -27455,7 +27455,8 @@ class Cache {
             const value = (await fs.readFile(key_path)).toString('utf-8');
             return Promise.resolve(value);
         }
-        catch {
+        catch (error) {
+            console.log(error);
             return null;
         }
     }
