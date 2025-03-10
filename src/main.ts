@@ -25,7 +25,7 @@ export async function run(): Promise<void> {
         ' if [ ${gc_installed} -lt 1 ]; then pip install globus-compute-sdk; fi;'
     )
 
-    const cache = new Cache('/tmp')
+    const cache = new Cache('./tmp')
 
     let access_token = await cache.get('access-token')
 

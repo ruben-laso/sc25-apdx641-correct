@@ -2,7 +2,7 @@ import { Cache } from '../src/cache'
 
 describe('functions.ts', () => {
   it('Create cache set, get, and remove', async () => {
-    const cache = new Cache('/tmp')
+    const cache = new Cache('./tmp')
 
     const inv_key = await cache.get('invalid_key')
     expect(inv_key).toBeNull()
