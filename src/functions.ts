@@ -75,7 +75,7 @@ export function register_function(
       ` "sdk_version": globus_compute_sdk.__version__, "serde_identifier": "01"}}))'`,
     { encoding: 'utf-8' }
   )
-  console.log(JSON.stringify(serialized_body))
+  console.log(serialized_body)
 
   const headers: Headers = new Headers()
   headers.set('Content-Type', 'application/json')
@@ -86,7 +86,7 @@ export function register_function(
   const request: Request = new Request(url, {
     method: 'POST',
     headers: headers,
-    body: JSON.stringify(serialized_body)
+    body: serialized_body
   })
 
   return fetch(request)

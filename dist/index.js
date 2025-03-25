@@ -31333,7 +31333,7 @@ function register_function(access_token, shell_cmd) {
         ` print(json.dumps({"function_name": "ci_shell_cmd", "function_code": data, "meta":` +
         ` { "python_version":  ".".join(str(v) for v in sys.version_info[0:3]),` +
         ` "sdk_version": globus_compute_sdk.__version__, "serde_identifier": "01"}}))'`, { encoding: 'utf-8' });
-    console.log(JSON.stringify(serialized_body));
+    console.log(serialized_body);
     const headers = new Headers();
     headers.set('Content-Type', 'application/json');
     headers.set('Authorization', `Bearer ${access_token}`);
@@ -31341,7 +31341,7 @@ function register_function(access_token, shell_cmd) {
     const request = new Request(url, {
         method: 'POST',
         headers: headers,
-        body: JSON.stringify(serialized_body)
+        body: serialized_body
     });
     return fetch(request)
         .then((res) => {
