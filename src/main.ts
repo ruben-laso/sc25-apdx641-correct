@@ -1,4 +1,5 @@
 import * as core from '@actions/core'
+import * as github from '@actions/github'
 import { Token } from './interfaces.js'
 import {
   getToken,
@@ -8,6 +9,7 @@ import {
 } from './functions.js'
 import { execSync } from 'child_process'
 import { Cache } from './cache.js'
+import * as path from 'path'
 
 /**
  * The main function for the action.
@@ -35,7 +37,7 @@ export async function run(): Promise<void> {
         ' if [ ${gc_installed} -lt 1 ]; then pip install globus-compute-sdk; fi;'
     )
 
-    const cache = new Cache('./tmp')
+    const cache = new Cache(path.resolve('./tmp'))
 
     let access_token = await cache.get('access-token')
 
@@ -48,6 +50,15 @@ export async function run(): Promise<void> {
       console.log('Reusing existing token')
       access_token = await cache.get('access-token')
     }
+
+    // Clone git repo with GC function
+    const branch = github.context.ref
+    const repo = github.context.repo
+
+    const url = `${github.context.serverUrl}/${repo.owner}/${repo.repo}/${branch}`
+    console.log(url)
+    throw Error('testing branch')
+    //const cmd = `mkdir gc-action-temp; cd gc-action-temp; git clone ${}`
 
     if (shell_cmd.length !== 0) {
       const reg_response = await register_function(shell_cmd)

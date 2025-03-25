@@ -13,6 +13,7 @@ import {
   Token,
   RegisterResponse
 } from '../src/interfaces.js'
+import { execSync } from 'child_process'
 //import { Token, TaskStatusResponse, TaskSubmission } from '../src/interfaces.js'
 
 jest.unstable_mockModule('../src/wait.js', () => ({ wait }))
@@ -48,6 +49,10 @@ const MockRegResponse: RegisterResponse = {
 const failedText = 'The fetch operation was unsuccessful.'
 
 describe('functions.ts', () => {
+  beforeAll(() => {
+    execSync('pip install globus-compute-sdk')
+  })
+
   beforeEach(() => {
     wait.mockImplementation(() => Promise.resolve('done!'))
 
