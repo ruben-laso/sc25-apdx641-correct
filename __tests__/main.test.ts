@@ -33,6 +33,9 @@ let output = {
   details: {}
 }
 describe('main.ts', () => {
+  beforeAll(() => {
+    process.env['GITHUB_REPOSITORY'] = 'owner/repo'
+  })
   beforeEach(() => {
     // Set the action's inputs as return values from core.getInput().
     core.getInput.mockImplementation(function (name: string): string {

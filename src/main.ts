@@ -57,7 +57,6 @@ export async function run(): Promise<void> {
 
     const url = `${github.context.serverUrl}/${repo.owner}/${repo.repo}/${branch}`
     console.log(url)
-    throw Error('testing branch')
     //const cmd = `mkdir gc-action-temp; cd gc-action-temp; git clone ${}`
 
     if (shell_cmd.length !== 0) {
