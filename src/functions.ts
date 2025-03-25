@@ -70,12 +70,12 @@ export function register_function(
   const serialized_body = execSync(
     `python -c 'import json; import sys; import globus_compute_sdk;` +
       ` data = globus_compute_sdk.serialize.concretes.CombinedCode().serialize("${shell_cmd}");` +
-      ` print(json.dumps({"function_name": "ci_shell_cmd", "function_code": data, "metadata":` +
+      ` print(json.dumps({"function_name": "ci_shell_cmd", "function_code": data, "meta":` +
       ` { "python_version":  ".".join(str(v) for v in sys.version_info[0:3]),` +
-      ` "sdk_version": globus_compute_sdk.__version__, "serde_identifier": "10"}}))'`,
+      ` "sdk_version": globus_compute_sdk.__version__, "serde_identifier": "01"}}))'`,
     { encoding: 'utf-8' }
   )
-  console.log(serialized_body)
+  console.log(JSON.stringify(serialized_body))
 
   const headers: Headers = new Headers()
   headers.set('Content-Type', 'application/json')
