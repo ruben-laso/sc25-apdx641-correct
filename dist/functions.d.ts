@@ -13,7 +13,7 @@ export declare function getToken(CLIENT_ID: string, CLIENT_SECRET: string): Prom
  * @param shell_cmd command to register with Globus Compute
  * @returns Registered function UUID
  */
-export declare function register_function(shell_cmd: string): Promise<RegisterResponse>;
+export declare function register_function(access_token: string | null, shell_cmd: string): Promise<RegisterResponse>;
 /**
  * Submit functions with given arguments to the specified Globus Compute Endpoint
  *

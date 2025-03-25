@@ -55,11 +55,11 @@ export async function run(): Promise<void> {
     const branch = github.context.ref
     const repo = github.context.repo
 
-    console.log('Cloning repo')
     const url = `${github.context.serverUrl}/${repo.owner}/${repo.repo}/${branch}`
+    console.log(`Cloning repo ${url}`)
     const cmd = `mkdir gc-action-temp; cd gc-action-temp; git clone ${url}`
     console.log('Registering function')
-    const clone_reg = await register_function(cmd)
+    const clone_reg = await register_function(access_token, cmd)
     const clone_uuid = clone_reg.function_uuid
 
     console.log('Submitting function to clone repo')
@@ -78,7 +78,7 @@ export async function run(): Promise<void> {
     //const cmd = `mkdir gc-action-temp; cd gc-action-temp; git clone ${}`
 
     if (shell_cmd.length !== 0) {
-      const reg_response = await register_function(shell_cmd)
+      const reg_response = await register_function(access_token, shell_cmd)
       function_uuid = reg_response.function_uuid
     }
 

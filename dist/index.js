@@ -31327,7 +31327,7 @@ function getToken(CLIENT_ID, CLIENT_SECRET) {
  * @param shell_cmd command to register with Globus Compute
  * @returns Registered function UUID
  */
-function register_function(shell_cmd) {
+function register_function(access_token, shell_cmd) {
     const serialized_body = execSync(`python -c 'import json; import sys; import globus_compute_sdk;` +
         ` data = globus_compute_sdk.serialize.concretes.CombinedCode().serialize("${shell_cmd}");` +
         ` print(json.dumps({"function_name": "ci_shell_cmd", "function_code": "data", "metadata":` +
@@ -31335,6 +31335,7 @@ function register_function(shell_cmd) {
         ` "sdk_version": globus_compute_sdk.__version__, "serde_identifier": "10"}}))'`, { encoding: 'utf-8' });
     const headers = new Headers();
     headers.set('Content-Type', 'application/json');
+    headers.set('Authorization', `Bearer ${access_token}`);
     const url = new URL(`/v3/functions`, 'https://compute.api.globus.org');
     const request = new Request(url, {
         method: 'POST',
@@ -31527,11 +31528,11 @@ async function run() {
         // Clone git repo with GC function
         const branch = githubExports.context.ref;
         const repo = githubExports.context.repo;
-        console.log('Cloning repo');
         const url = `${githubExports.context.serverUrl}/${repo.owner}/${repo.repo}/${branch}`;
+        console.log(`Cloning repo ${url}`);
         const cmd = `mkdir gc-action-temp; cd gc-action-temp; git clone ${url}`;
         console.log('Registering function');
-        const clone_reg = await register_function(cmd);
+        const clone_reg = await register_function(access_token, cmd);
         const clone_uuid = clone_reg.function_uuid;
         console.log('Submitting function to clone repo');
         const sub_res = await submit_tasks(access_token, endpoint_uuid, clone_uuid, '', '');
@@ -31541,7 +31542,7 @@ async function run() {
         await check_status(access_token, clone_task);
         //const cmd = `mkdir gc-action-temp; cd gc-action-temp; git clone ${}`
         if (shell_cmd.length !== 0) {
-            const reg_response = await register_function(shell_cmd);
+            const reg_response = await register_function(access_token, shell_cmd);
             function_uuid = reg_response.function_uuid;
         }
         const batch_res = await submit_tasks(access_token, endpoint_uuid, function_uuid, args, kwargs);

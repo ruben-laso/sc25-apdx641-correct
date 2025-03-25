@@ -266,7 +266,7 @@ describe('functions.ts', () => {
       } as Response)
     )
 
-    const reg_response = await register_function('at01')
+    const reg_response = await register_function('at', 'at01')
     expect(reg_response).toBe(MockRegResponse)
   })
   it('Failed registration', async () => {
@@ -287,7 +287,7 @@ describe('functions.ts', () => {
 
     let err
     try {
-      await register_function('1234')
+      await register_function('at', '1234')
     } catch (error) {
       err = error
     }

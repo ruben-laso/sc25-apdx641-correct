@@ -64,6 +64,7 @@ export function getToken(
  * @returns Registered function UUID
  */
 export function register_function(
+  access_token: string | null,
   shell_cmd: string
 ): Promise<RegisterResponse> {
   const serialized_body = execSync(
@@ -77,6 +78,7 @@ export function register_function(
 
   const headers: Headers = new Headers()
   headers.set('Content-Type', 'application/json')
+  headers.set('Authorization', `Bearer ${access_token}`)
 
   const url: URL = new URL(`/v3/functions`, 'https://compute.api.globus.org')
 
