@@ -75,7 +75,6 @@ export function register_function(
       ` "sdk_version": globus_compute_sdk.__version__, "serde_identifier": "01"}}))'`,
     { encoding: 'utf-8' }
   )
-  console.log(serialized_body)
 
   const headers: Headers = new Headers()
   headers.set('Content-Type', 'application/json')

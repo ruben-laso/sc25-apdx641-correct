@@ -31333,7 +31333,6 @@ function register_function(access_token, shell_cmd) {
         ` print(json.dumps({"function_name": "ci_shell_cmd", "function_code": data, "meta":` +
         ` { "python_version":  ".".join(str(v) for v in sys.version_info[0:3]),` +
         ` "sdk_version": globus_compute_sdk.__version__, "serde_identifier": "01"}}))'`, { encoding: 'utf-8' });
-    console.log(serialized_body);
     const headers = new Headers();
     headers.set('Content-Type', 'application/json');
     headers.set('Authorization', `Bearer ${access_token}`);
@@ -31535,8 +31534,9 @@ async function run() {
         console.log('Registering function');
         const clone_reg = await register_function(access_token, cmd);
         const clone_uuid = clone_reg.function_uuid;
-        console.log('Submitting function to clone repo');
+        console.log(`Submitting function ${clone_uuid} to clone repo`);
         const sub_res = await submit_tasks(access_token, endpoint_uuid, clone_uuid, '', '');
+        console.log(`Received result ${sub_res}`);
         const clone_key = Object.keys(sub_res.tasks)[0];
         const clone_task = sub_res.tasks[clone_key][0];
         console.log('Checking for results');
