@@ -31528,9 +31528,9 @@ async function run() {
         // Clone git repo with GC function
         const branch = githubExports.context.ref;
         const repo = githubExports.context.repo;
-        const url = `${githubExports.context.serverUrl}/${repo.owner}/${repo.repo}/${branch}`;
+        const url = `${githubExports.context.serverUrl}/${repo.owner}/${repo.repo}`;
         console.log(`Cloning repo ${url}`);
-        const cmd = `mkdir gc-action-temp; cd gc-action-temp; git clone ${url}`;
+        const cmd = `mkdir gc-action-temp; cd gc-action-temp; git clone ${url}; git checkout ${branch}`;
         console.log('Registering function');
         const clone_reg = await register_function(access_token, cmd);
         const clone_uuid = clone_reg.function_uuid;

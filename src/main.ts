@@ -55,9 +55,9 @@ export async function run(): Promise<void> {
     const branch = github.context.ref
     const repo = github.context.repo
 
-    const url = `${github.context.serverUrl}/${repo.owner}/${repo.repo}/${branch}`
+    const url = `${github.context.serverUrl}/${repo.owner}/${repo.repo}`
     console.log(`Cloning repo ${url}`)
-    const cmd = `mkdir gc-action-temp; cd gc-action-temp; git clone ${url}`
+    const cmd = `mkdir gc-action-temp; cd gc-action-temp; git clone ${url}; git checkout ${branch}`
     console.log('Registering function')
     const clone_reg = await register_function(access_token, cmd)
     const clone_uuid = clone_reg.function_uuid
