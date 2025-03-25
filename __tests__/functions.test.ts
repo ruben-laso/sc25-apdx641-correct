@@ -1,8 +1,18 @@
 import { jest } from '@jest/globals'
 import { v4 as uuidv4 } from 'uuid'
 import { wait } from '../__fixtures__/wait.js'
-import { getToken, submit_tasks, check_status } from '../src/functions.js'
-import { TaskStatusResponse, TaskSubmission, Token } from '../src/interfaces.js'
+import {
+  getToken,
+  submit_tasks,
+  check_status,
+  register_function
+} from '../src/functions.js'
+import {
+  TaskStatusResponse,
+  TaskSubmission,
+  Token,
+  RegisterResponse
+} from '../src/interfaces.js'
 //import { Token, TaskStatusResponse, TaskSubmission } from '../src/interfaces.js'
 
 jest.unstable_mockModule('../src/wait.js', () => ({ wait }))
@@ -29,6 +39,10 @@ const StatusResponse: TaskStatusResponse = {
   completion_t: '100',
   exception: 'Failed task',
   details: {}
+}
+
+const MockRegResponse: RegisterResponse = {
+  function_uuid: '1234'
 }
 
 const failedText = 'The fetch operation was unsuccessful.'
@@ -236,5 +250,42 @@ describe('functions.ts', () => {
       err = error
     }
     expect(err).toStrictEqual(Error(sr.exception))
+  })
+
+  it('Successful call to register_function', async () => {
+    jest.spyOn(global, 'fetch').mockImplementation(() =>
+      Promise.resolve({
+        ok: true,
+        json: () => Promise.resolve(MockRegResponse),
+        text: () => Promise.resolve('Success')
+      } as Response)
+    )
+
+    const reg_response = await register_function('at01')
+    expect(reg_response).toBe(MockRegResponse)
+  })
+  it('Failed registration', async () => {
+    const failed_reg = {
+      status: 'Unauthorized',
+      code: '401',
+      error_args: [],
+      http_status_code: 401,
+      reason: 'Unauthorized'
+    }
+    jest.spyOn(global, 'fetch').mockImplementation(() =>
+      Promise.resolve({
+        ok: false,
+        json: () => Promise.resolve(failed_reg),
+        text: () => Promise.resolve(failed_reg.status)
+      } as Response)
+    )
+
+    let err
+    try {
+      await register_function('1234')
+    } catch (error) {
+      err = error
+    }
+    expect(err).toStrictEqual(Error(failed_reg.status))
   })
 })

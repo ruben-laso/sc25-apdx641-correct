@@ -1,6 +1,11 @@
 import * as core from '@actions/core'
 import { Token } from './interfaces.js'
-import { getToken, submit_tasks, check_status } from './functions.js'
+import {
+  getToken,
+  submit_tasks,
+  check_status,
+  register_function
+} from './functions.js'
 import { execSync } from 'child_process'
 import { Cache } from './cache.js'
 
@@ -14,7 +19,12 @@ export async function run(): Promise<void> {
     const CLIENT_ID: string = core.getInput('client_id')
     const CLIENT_SECRET: string = core.getInput('client_secret')
     const endpoint_uuid: string = core.getInput('endpoint_uuid')
-    const function_uuid: string = core.getInput('function_uuid')
+    let function_uuid: string = core.getInput('function_uuid')
+    const shell_cmd: string = core.getInput('shell_cmd')
+
+    if (function_uuid === '' && shell_cmd === '') {
+      throw Error('Either shell_cmd or function_uuid must be specified')
+    }
 
     const args: string = core.getInput('args')
     const kwargs: string = core.getInput('kwargs')
@@ -37,6 +47,11 @@ export async function run(): Promise<void> {
     } else {
       console.log('Reusing existing token')
       access_token = await cache.get('access-token')
+    }
+
+    if (shell_cmd.length !== 0) {
+      const reg_response = await register_function(shell_cmd)
+      function_uuid = reg_response.function_uuid
     }
 
     const batch_res = await submit_tasks(

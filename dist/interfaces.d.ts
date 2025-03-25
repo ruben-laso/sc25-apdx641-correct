@@ -19,3 +19,6 @@ export interface TaskSubmission {
     endpoint_id: string;
     tasks: object;
 }
+export interface RegisterResponse {
+    function_uuid: string;
+}

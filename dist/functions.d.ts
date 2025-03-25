@@ -1,4 +1,4 @@
-import { Token, TaskStatusResponse, TaskSubmission } from './interfaces.js';
+import { Token, TaskStatusResponse, TaskSubmission, RegisterResponse } from './interfaces.js';
 /**
  * Retrieve bearer tokens from Globus Auth
  *
@@ -8,6 +8,12 @@ import { Token, TaskStatusResponse, TaskSubmission } from './interfaces.js';
  *
  */
 export declare function getToken(CLIENT_ID: string, CLIENT_SECRET: string): Promise<Token>;
+/**
+ *
+ * @param shell_cmd command to register with Globus Compute
+ * @returns Registered function UUID
+ */
+export declare function register_function(shell_cmd: string): Promise<RegisterResponse>;
 /**
  * Submit functions with given arguments to the specified Globus Compute Endpoint
  *

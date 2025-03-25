@@ -1,4 +1,10 @@
-import { Token, TaskStatusResponse, TaskSubmission } from './interfaces.js'
+import {
+  Token,
+  TaskStatusResponse,
+  TaskSubmission,
+  RegisterResponse
+} from './interfaces.js'
+import { execSync } from 'child_process'
 import { exponential_decay } from './decay.js'
 import { Buffer } from 'buffer'
 import { validate as isValidUUID } from 'uuid'
@@ -49,6 +55,48 @@ export function getToken(
     })
     .then((res) => {
       return res as Token
+    })
+}
+
+/**
+ *
+ * @param shell_cmd command to register with Globus Compute
+ * @returns Registered function UUID
+ */
+export function register_function(
+  shell_cmd: string
+): Promise<RegisterResponse> {
+  const serialized_body = execSync(
+    `python -c 'import json; import sys; import globus_compute_sdk;` +
+      ` data = globus_compute_sdk.serialize.concretes.CombinedCode().serialize("${shell_cmd}");` +
+      ` print(json.dumps({"function_name": "ci_shell_cmd", "function_code": "data", "metadata":` +
+      ` { "python_version":  ".".join(str(v) for v in sys.version_info[0:3]),` +
+      ` "sdk_version": globus_compute_sdk.__version__, "serde_identifier": "10"}}))'`,
+    { encoding: 'utf-8' }
+  )
+
+  const headers: Headers = new Headers()
+  headers.set('Content-Type', 'application/json')
+
+  const url: URL = new URL(`/v3/functions`, 'https://compute.api.globus.org')
+
+  const request: Request = new Request(url, {
+    method: 'POST',
+    headers: headers,
+    body: JSON.stringify(serialized_body)
+  })
+
+  return fetch(request)
+    .then((res) => {
+      if (res.ok) {
+        return res.json()
+      }
+      return res.text().then((text) => {
+        throw new Error(text)
+      })
+    })
+    .then((res) => {
+      return res as RegisterResponse
     })
 }
 

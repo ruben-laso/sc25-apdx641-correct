@@ -36,18 +36,20 @@ describe('main.ts', () => {
   beforeEach(() => {
     // Set the action's inputs as return values from core.getInput().
     core.getInput.mockImplementation(function (name: string): string {
-      if (name === 'client-id') {
+      if (name === 'client_id') {
         return '1'
-      } else if (name === 'client-secret') {
+      } else if (name === 'client_secret') {
         return '2'
-      } else if (name === 'endpoint-uuid') {
+      } else if (name === 'endpoint_uuid') {
         return '3'
-      } else if (name === 'function-uuid') {
+      } else if (name === 'function_uuid') {
         return '4'
       } else if (name === 'args') {
         return '[]'
-      } else {
+      } else if (name === 'kwargs') {
         return '{}'
+      } else {
+        return ''
       }
     })
 
@@ -72,6 +74,10 @@ describe('main.ts', () => {
 
     gcf.check_status.mockImplementation(() => Promise.resolve(output))
 
+    gcf.register_function.mockImplementation(() =>
+      Promise.resolve({ function_uuid: '1234' })
+    )
+
     // Mock the wait function so that it does not actually wait.
     wait.mockImplementation(() => Promise.resolve('done!'))
 
@@ -88,6 +94,59 @@ describe('main.ts', () => {
     await run()
     expect(core.setOutput).toHaveBeenCalledWith('response', output)
     expect(core.setOutput).toHaveBeenCalledWith('result', output.result)
+  })
+
+  it('Validate that main function fails when adequate inputs are not provided', async () => {
+    core.getInput.mockReset()
+    core.getInput.mockImplementation(function (name: string): string {
+      if (name === 'client-id') {
+        return '1'
+      } else if (name === 'client-secret') {
+        return '2'
+      } else if (name === 'endpoint-uuid') {
+        return '3'
+      } else if (name === 'args') {
+        return '[]'
+      } else if (name == 'kwargs') {
+        return '{}'
+      } else {
+        return ''
+      }
+    })
+    await run()
+    expect(core.setFailed).toHaveBeenCalledWith(
+      Error('Either shell_cmd or function_uuid must be specified')
+    )
+  })
+
+  it('Test registration of shell cmd', async () => {
+    const reg_result = JSON.stringify({
+      python_version: '1.2.3',
+      sdk_version: '123',
+      serde_identifier: '10'
+    })
+    cp.execSync.mockReturnValueOnce(reg_result)
+    core.getInput.mockReset()
+    core.getInput.mockImplementation(function (name: string): string {
+      if (name === 'client_id') {
+        return '1'
+      } else if (name === 'client_secret') {
+        return '2'
+      } else if (name === 'endpoint_uuid') {
+        return '3'
+      } else if (name === 'shell_cmd') {
+        return 'pip freeze'
+      } else if (name === 'args') {
+        return '[]'
+      } else if (name === 'kwargs') {
+        return '{}'
+      } else {
+        return ''
+      }
+    })
+    await run()
+    expect(core.setOutput).toHaveBeenCalledWith('response', output)
+    expect(core.setOutput).toHaveBeenCalledWith('result', reg_result)
   })
 
   it('Add coverage for JSON output types', async () => {

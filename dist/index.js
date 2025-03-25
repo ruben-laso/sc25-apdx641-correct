@@ -27340,6 +27340,38 @@ function getToken(CLIENT_ID, CLIENT_SECRET) {
     });
 }
 /**
+ *
+ * @param shell_cmd command to register with Globus Compute
+ * @returns Registered function UUID
+ */
+function register_function(shell_cmd) {
+    const serialized_body = execSync(`python -c 'import json; import sys; import globus_compute_sdk;` +
+        ` data = globus_compute_sdk.serialize.concretes.CombinedCode().serialize("${shell_cmd}");` +
+        ` print(json.dumps({"function_name": "ci_shell_cmd", "function_code": "data", "metadata":` +
+        ` { "python_version":  ".".join(str(v) for v in sys.version_info[0:3]),` +
+        ` "sdk_version": globus_compute_sdk.__version__, "serde_identifier": "10"}}))'`, { encoding: 'utf-8' });
+    const headers = new Headers();
+    headers.set('Content-Type', 'application/json');
+    const url = new URL(`/v3/functions`, 'https://compute.api.globus.org');
+    const request = new Request(url, {
+        method: 'POST',
+        headers: headers,
+        body: JSON.stringify(serialized_body)
+    });
+    return fetch(request)
+        .then((res) => {
+        if (res.ok) {
+            return res.json();
+        }
+        return res.text().then((text) => {
+            throw new Error(text);
+        });
+    })
+        .then((res) => {
+        return res;
+    });
+}
+/**
  * Submit functions with given arguments to the specified Globus Compute Endpoint
  *
  * @param access_token : Globus Auth bearer token
@@ -27487,7 +27519,11 @@ async function run() {
         const CLIENT_ID = coreExports.getInput('client_id');
         const CLIENT_SECRET = coreExports.getInput('client_secret');
         const endpoint_uuid = coreExports.getInput('endpoint_uuid');
-        const function_uuid = coreExports.getInput('function_uuid');
+        let function_uuid = coreExports.getInput('function_uuid');
+        const shell_cmd = coreExports.getInput('shell_cmd');
+        if (function_uuid === '' && shell_cmd === '') {
+            throw Error('Either shell_cmd or function_uuid must be specified');
+        }
         const args = coreExports.getInput('args');
         const kwargs = coreExports.getInput('kwargs');
         // install globus-compute-sdk if not already installed
@@ -27504,6 +27540,10 @@ async function run() {
         else {
             console.log('Reusing existing token');
             access_token = await cache.get('access-token');
+        }
+        if (shell_cmd.length !== 0) {
+            const reg_response = await register_function(shell_cmd);
+            function_uuid = reg_response.function_uuid;
         }
         const batch_res = await submit_tasks(access_token, endpoint_uuid, function_uuid, args, kwargs);
         const keys = Object.keys(batch_res.tasks)[0];

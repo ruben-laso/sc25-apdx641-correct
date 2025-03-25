@@ -11,8 +11,16 @@ inputs:
     description: Globus Compute endpoint UUID to run tasks on
     required: true
   function_uuid:
-    description: Function UUID to run on endpoint
-    required: true
+    description:
+      Function UUID to run on endpoint. Is overidden if shell_cmd is provided.
+    required: false
+    default: ''
+  shell_cmd:
+    description:
+      Shell command to execute using Globus Compute. Takes priority over
+      function_uuid and ignores any specified args and kwargs.
+    required: false
+    default: ''
   args:
     description: Task input args specified as list of arguments
     default: '[]'
