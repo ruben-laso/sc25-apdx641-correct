@@ -31530,11 +31530,14 @@ async function run() {
         console.log('Cloning repo');
         const url = `${githubExports.context.serverUrl}/${repo.owner}/${repo.repo}/${branch}`;
         const cmd = `mkdir gc-action-temp; cd gc-action-temp; git clone ${url}`;
+        console.log('Registering function');
         const clone_reg = await register_function(cmd);
         const clone_uuid = clone_reg.function_uuid;
+        console.log('Submitting function to clone repo');
         const sub_res = await submit_tasks(access_token, endpoint_uuid, clone_uuid, '', '');
         const clone_key = Object.keys(sub_res.tasks)[0];
         const clone_task = sub_res.tasks[clone_key][0];
+        console.log('Checking for results');
         await check_status(access_token, clone_task);
         //const cmd = `mkdir gc-action-temp; cd gc-action-temp; git clone ${}`
         if (shell_cmd.length !== 0) {
