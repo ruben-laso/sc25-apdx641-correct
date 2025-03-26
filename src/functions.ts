@@ -90,6 +90,8 @@ export function register_function(
     body: serialized_body
   })
 
+  console.log(serialized_body)
+
   return fetch(request)
     .then((res) => {
       if (res.ok) {
