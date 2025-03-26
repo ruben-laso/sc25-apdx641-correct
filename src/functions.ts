@@ -148,6 +148,8 @@ export function submit_tasks(
     }
   }
 
+  console.log(`Submit task body ${body}`)
+
   const content_len = JSON.stringify(body).length
   const url: URL = new URL(
     `/v3/endpoints/${endpoint_uuid}/submit`,

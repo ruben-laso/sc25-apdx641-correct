@@ -31390,6 +31390,7 @@ function submit_tasks(access_token, endpoint_uuid, function_uuid, args, kwargs) 
             [function_uuid]: [serde_args]
         }
     };
+    console.log(`Submit task body ${body}`);
     const content_len = JSON.stringify(body).length;
     const url = new URL(`/v3/endpoints/${endpoint_uuid}/submit`, 'https://compute.api.globus.org');
     url.search = new URLSearchParams({
