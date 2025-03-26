@@ -76,6 +76,8 @@ export function register_function(
     { encoding: 'utf-8' }
   )
 
+  console.log(execSync('python --version', { encoding: 'utf-8' }))
+
   const headers: Headers = new Headers()
   headers.set('Content-Type', 'application/json')
   headers.set('Authorization', `Bearer ${access_token}`)
