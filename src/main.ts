@@ -67,8 +67,8 @@ export async function run(): Promise<void> {
       access_token,
       endpoint_uuid,
       clone_uuid,
-      '',
-      ''
+      '[]',
+      '{}'
     )
     console.log(`Received result ${sub_res}`)
     const clone_key: string = Object.keys(sub_res.tasks)[0]

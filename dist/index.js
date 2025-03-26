@@ -31536,7 +31536,7 @@ async function run() {
         const clone_reg = await register_function(access_token, cmd);
         const clone_uuid = clone_reg.function_uuid;
         console.log(`Submitting function ${clone_uuid} to clone repo`);
-        const sub_res = await submit_tasks(access_token, endpoint_uuid, clone_uuid, '', '');
+        const sub_res = await submit_tasks(access_token, endpoint_uuid, clone_uuid, '[]', '{}');
         console.log(`Received result ${sub_res}`);
         const clone_key = Object.keys(sub_res.tasks)[0];
         const clone_task = sub_res.tasks[clone_key][0];
