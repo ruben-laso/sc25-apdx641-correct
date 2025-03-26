@@ -23,6 +23,10 @@ export async function run(): Promise<void> {
     const endpoint_uuid: string = core.getInput('endpoint_uuid')
     let function_uuid: string = core.getInput('function_uuid')
     const shell_cmd: string = core.getInput('shell_cmd')
+    const user_endpoint_config: string = core.getInput('user_endpoint_config')
+    const resource_specification: string = core.getInput(
+      'resource_specification'
+    )
 
     if (function_uuid === '' && shell_cmd === '') {
       throw Error('Either shell_cmd or function_uuid must be specified')
@@ -54,10 +58,12 @@ export async function run(): Promise<void> {
     // Clone git repo with GC function
     const branch = github.context.ref
     const repo = github.context.repo
+    const tmp_workdir = 'gc-action-temp'
+    const tmp_repodir = `${tmp_workdir}/${repo.repo}`
 
     const url = `${github.context.serverUrl}/${repo.owner}/${repo.repo}`
     console.log(`Cloning repo ${url}`)
-    const cmd = `mkdir gc-action-temp; cd gc-action-temp; git clone ${url}; git checkout ${branch}`
+    const cmd = `mkdir ${tmp_workdir}; cd ${tmp_repodir}; git clone ${url}; git checkout ${branch}`
     console.log('Registering function')
     const clone_reg = await register_function(access_token, cmd)
     const clone_uuid = clone_reg.function_uuid
@@ -66,11 +72,13 @@ export async function run(): Promise<void> {
     const sub_res = await submit_tasks(
       access_token,
       endpoint_uuid,
+      user_endpoint_config,
+      resource_specification,
       clone_uuid,
       '[]',
       '{}'
     )
-    console.log(`Received result ${sub_res}`)
+
     const clone_key: string = Object.keys(sub_res.tasks)[0]
     const clone_task: string = sub_res.tasks[clone_key as keyof object][0]
     console.log('Checking for results')
@@ -86,6 +94,8 @@ export async function run(): Promise<void> {
     const batch_res = await submit_tasks(
       access_token,
       endpoint_uuid,
+      user_endpoint_config,
+      resource_specification,
       function_uuid,
       args,
       kwargs

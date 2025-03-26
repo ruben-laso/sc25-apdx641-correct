@@ -76,8 +76,6 @@ export function register_function(
     { encoding: 'utf-8' }
   )
 
-  console.log(execSync('python --version', { encoding: 'utf-8' }))
-
   const headers: Headers = new Headers()
   headers.set('Content-Type', 'application/json')
   headers.set('Authorization', `Bearer ${access_token}`)
@@ -89,8 +87,6 @@ export function register_function(
     headers: headers,
     body: serialized_body
   })
-
-  console.log(serialized_body)
 
   return fetch(request)
     .then((res) => {
@@ -120,6 +116,8 @@ export function register_function(
 export function submit_tasks(
   access_token: string | null,
   endpoint_uuid: string,
+  user_endpoint_config: string,
+  resource_specification: string,
   function_uuid: string,
   args: string,
   kwargs: string
@@ -146,13 +144,18 @@ export function submit_tasks(
   headers.set('Content-Type', 'application/json')
   headers.set('Authorization', `Bearer ${access_token}`)
 
-  const body: object = {
+  const body: { [key: string]: string | number | object } = {
     tasks: {
       [function_uuid]: [serde_args]
     }
   }
 
-  console.log(`Submit task body ${body}`)
+  if (user_endpoint_config !== '{}') {
+    body['user_endpoint_config'] = JSON.parse(user_endpoint_config)
+  }
+  if (resource_specification !== '{}') {
+    body['resource_specification'] = JSON.parse(resource_specification)
+  }
 
   const content_len = JSON.stringify(body).length
   const url: URL = new URL(

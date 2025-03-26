@@ -118,6 +118,8 @@ describe('functions.ts', () => {
     let sub_response = await submit_tasks(
       'a111',
       endpoint_uuid,
+      '{}',
+      '{}',
       function_uuid,
       '[]',
       '{}'
@@ -128,6 +130,32 @@ describe('functions.ts', () => {
     sub_response = await submit_tasks(
       'a111',
       endpoint_uuid,
+      '{}',
+      '{}',
+      function_uuid,
+      '[]',
+      '{}'
+    )
+    expect(sub_response).toBe(ValidTaskSubmissionResponse)
+
+    // with user_endpoint_config
+    sub_response = await submit_tasks(
+      'a111',
+      endpoint_uuid,
+      '{ "min_blocks": 0, "max_blocks": 1 }',
+      '{}',
+      function_uuid,
+      '[]',
+      '{}'
+    )
+    expect(sub_response).toBe(ValidTaskSubmissionResponse)
+
+    // with resource_specification
+    sub_response = await submit_tasks(
+      'a111',
+      endpoint_uuid,
+      '{}',
+      '{ "num_nodes": 2 }',
       function_uuid,
       '[]',
       '{}'
@@ -146,7 +174,7 @@ describe('functions.ts', () => {
 
     let err
     try {
-      await submit_tasks('a111', 'eid2', 'func_id', '[]', '{}')
+      await submit_tasks('a111', 'eid2', '{}', '{}', 'func_id', '[]', '{}')
     } catch (error) {
       err = error
     }
@@ -157,6 +185,8 @@ describe('functions.ts', () => {
       await submit_tasks(
         'a111',
         ValidTaskSubmissionResponse.endpoint_id,
+        '{}',
+        '{}',
         'func_id',
         '[]',
         '{}'
@@ -170,6 +200,8 @@ describe('functions.ts', () => {
       await submit_tasks(
         'a111',
         ValidTaskSubmissionResponse.endpoint_id,
+        '{}',
+        '{}',
         function_uuid,
         '[]',
         '{}'

@@ -10,6 +10,16 @@ inputs:
   endpoint_uuid:
     description: Globus Compute endpoint UUID to run tasks on
     required: true
+  user_endpoint_config:
+    description:
+      Configuration values for endpoint that are described and allowed by
+      endpoint administrators
+    required: false
+    default: '{}'
+  resource_specification:
+    description: Resource requirements for individual task execution
+    required: false
+    default: '{}'
   function_uuid:
     description:
       Function UUID to run on endpoint. Is overidden if shell_cmd is provided.
