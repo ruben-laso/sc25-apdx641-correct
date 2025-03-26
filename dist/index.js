@@ -31332,7 +31332,7 @@ function register_function(access_token, shell_cmd) {
         ` data = globus_compute_sdk.serialize.concretes.CombinedCode().serialize("${shell_cmd}");` +
         ` print(json.dumps({"function_name": "ci_shell_cmd", "function_code": data, "meta":` +
         ` { "python_version":  ".".join(str(v) for v in sys.version_info[0:3]),` +
-        ` "sdk_version": globus_compute_sdk.__version__, "serde_identifier": "01"}}))'`, { encoding: 'utf-8' });
+        ` "sdk_version": globus_compute_sdk.__version__, "serde_identifier": "10"}}))'`, { encoding: 'utf-8' });
     const headers = new Headers();
     headers.set('Content-Type', 'application/json');
     headers.set('Authorization', `Bearer ${access_token}`);

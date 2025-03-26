@@ -72,7 +72,7 @@ export function register_function(
       ` data = globus_compute_sdk.serialize.concretes.CombinedCode().serialize("${shell_cmd}");` +
       ` print(json.dumps({"function_name": "ci_shell_cmd", "function_code": data, "meta":` +
       ` { "python_version":  ".".join(str(v) for v in sys.version_info[0:3]),` +
-      ` "sdk_version": globus_compute_sdk.__version__, "serde_identifier": "01"}}))'`,
+      ` "sdk_version": globus_compute_sdk.__version__, "serde_identifier": "10"}}))'`,
     { encoding: 'utf-8' }
   )
 
