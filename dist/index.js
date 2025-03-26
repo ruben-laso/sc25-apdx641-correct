@@ -31329,10 +31329,10 @@ function getToken(CLIENT_ID, CLIENT_SECRET) {
  */
 function register_function(access_token, shell_cmd) {
     const serialized_body = execSync(`python -c 'import json; import sys; import globus_compute_sdk;` +
-        ` data = globus_compute_sdk.serialize.concretes.DillCode().serialize(globus_compute_sdk.sdk.shell_function.ShellFunction("${shell_cmd}"));` +
+        ` data = globus_compute_sdk.serialize.concretes.CombinedCode().serialize(globus_compute_sdk.sdk.shell_function.ShellFunction("${shell_cmd}"));` +
         ` print(json.dumps({"function_name": "ci_shell_cmd", "function_code": f"{len(data)}\\n{data}", "meta":` +
         ` { "python_version":  ".".join(str(v) for v in sys.version_info[0:3]),` +
-        ` "sdk_version": globus_compute_sdk.__version__, "serde_identifier": "01"}}))'`, { encoding: 'utf-8' });
+        ` "sdk_version": globus_compute_sdk.__version__, "serde_identifier": "10"}}))'`, { encoding: 'utf-8' });
     console.log(execSync('python --version', { encoding: 'utf-8' }));
     const headers = new Headers();
     headers.set('Content-Type', 'application/json');
