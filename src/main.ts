@@ -27,6 +27,8 @@ export async function run(): Promise<void> {
     const resource_specification: string = core.getInput(
       'resource_specification'
     )
+    const endpoint_config = JSON.parse(user_endpoint_config)
+    const resource_spec = JSON.parse(resource_specification)
 
     if (function_uuid === '' && shell_cmd === '') {
       throw Error('Either shell_cmd or function_uuid must be specified')
@@ -72,8 +74,8 @@ export async function run(): Promise<void> {
     const sub_res = await submit_tasks(
       access_token,
       endpoint_uuid,
-      user_endpoint_config,
-      resource_specification,
+      endpoint_config,
+      resource_spec,
       clone_uuid,
       '[]',
       '{}'
@@ -94,12 +96,13 @@ export async function run(): Promise<void> {
     const batch_res = await submit_tasks(
       access_token,
       endpoint_uuid,
-      user_endpoint_config,
-      resource_specification,
+      endpoint_config,
+      resource_spec,
       function_uuid,
       args,
       kwargs
     )
+
     const keys: string = Object.keys(batch_res.tasks)[0]
     const task_uuid: string = batch_res.tasks[keys as keyof object][0]
     const response = await check_status(access_token, task_uuid)

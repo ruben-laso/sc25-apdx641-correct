@@ -115,11 +115,13 @@ describe('functions.ts', () => {
       } as Response)
     )
 
+    const endpoint_config = {}
+
     let sub_response = await submit_tasks(
       'a111',
       endpoint_uuid,
-      '{}',
-      '{}',
+      endpoint_config,
+      {},
       function_uuid,
       '[]',
       '{}'
@@ -130,8 +132,8 @@ describe('functions.ts', () => {
     sub_response = await submit_tasks(
       'a111',
       endpoint_uuid,
-      '{}',
-      '{}',
+      endpoint_config,
+      {},
       function_uuid,
       '[]',
       '{}'
@@ -142,8 +144,8 @@ describe('functions.ts', () => {
     sub_response = await submit_tasks(
       'a111',
       endpoint_uuid,
-      '{ "min_blocks": 0, "max_blocks": 1 }',
-      '{}',
+      { min_blocks: 0, max_blocks: 1 },
+      {},
       function_uuid,
       '[]',
       '{}'
@@ -154,8 +156,8 @@ describe('functions.ts', () => {
     sub_response = await submit_tasks(
       'a111',
       endpoint_uuid,
-      '{}',
-      '{ "num_nodes": 2 }',
+      endpoint_config,
+      { num_nodes: 2 },
       function_uuid,
       '[]',
       '{}'
@@ -174,7 +176,7 @@ describe('functions.ts', () => {
 
     let err
     try {
-      await submit_tasks('a111', 'eid2', '{}', '{}', 'func_id', '[]', '{}')
+      await submit_tasks('a111', 'eid2', {}, {}, 'func_id', '[]', '{}')
     } catch (error) {
       err = error
     }
@@ -185,8 +187,8 @@ describe('functions.ts', () => {
       await submit_tasks(
         'a111',
         ValidTaskSubmissionResponse.endpoint_id,
-        '{}',
-        '{}',
+        {},
+        {},
         'func_id',
         '[]',
         '{}'
@@ -200,8 +202,8 @@ describe('functions.ts', () => {
       await submit_tasks(
         'a111',
         ValidTaskSubmissionResponse.endpoint_id,
-        '{}',
-        '{}',
+        {},
+        {},
         function_uuid,
         '[]',
         '{}'

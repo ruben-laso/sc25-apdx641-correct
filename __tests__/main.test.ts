@@ -49,8 +49,10 @@ describe('main.ts', () => {
         return '4'
       } else if (name === 'args') {
         return '[]'
-      } else if (name === 'kwargs') {
+      } else if (name === 'kwargs' || name === 'user_endpoint_config') {
         return '{}'
+      } else if (name === 'resource_specification') {
+        return '{ "num_nodes": 1 }'
       } else {
         return ''
       }
@@ -110,8 +112,10 @@ describe('main.ts', () => {
         return '3'
       } else if (name === 'args') {
         return '[]'
-      } else if (name == 'kwargs') {
+      } else if (name == 'kwargs' || name == 'user_endpoint_config') {
         return '{}'
+      } else if (name === 'resource_specification') {
+        return '{ "num_nodes": 1 }'
       } else {
         return ''
       }
@@ -141,8 +145,10 @@ describe('main.ts', () => {
         return 'pip freeze'
       } else if (name === 'args') {
         return '[]'
-      } else if (name === 'kwargs') {
+      } else if (name === 'kwargs' || name == 'user_endpoint_config') {
         return '{}'
+      } else if (name === 'resource_specification') {
+        return '{ "num_nodes": 1 }'
       } else {
         return ''
       }

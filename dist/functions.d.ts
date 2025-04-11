@@ -25,7 +25,11 @@ export declare function register_function(access_token: string | null, shell_cmd
  * @returns Task submission response returned by Globus Compute
  *
  */
-export declare function submit_tasks(access_token: string | null, endpoint_uuid: string, user_endpoint_config: string, resource_specification: string, function_uuid: string, args: string, kwargs: string): Promise<TaskSubmission>;
+export declare function submit_tasks(access_token: string | null, endpoint_uuid: string, user_endpoint_config: {
+    [key: string]: string | number | object;
+}, resource_specification: {
+    [key: string]: string | number | object;
+}, function_uuid: string, args: string, kwargs: string): Promise<TaskSubmission>;
 /**
  * Check the status of a running task
  *

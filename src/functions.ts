@@ -116,8 +116,8 @@ export function register_function(
 export function submit_tasks(
   access_token: string | null,
   endpoint_uuid: string,
-  user_endpoint_config: string,
-  resource_specification: string,
+  user_endpoint_config: { [key: string]: string | number | object },
+  resource_specification: { [key: string]: string | number | object },
   function_uuid: string,
   args: string,
   kwargs: string
@@ -150,11 +150,10 @@ export function submit_tasks(
     }
   }
 
-  if (user_endpoint_config !== '{}') {
-    body['user_endpoint_config'] = JSON.parse(user_endpoint_config)
-  }
-  if (resource_specification !== '{}') {
-    body['resource_specification'] = JSON.parse(resource_specification)
+  body['user_endpoint_config'] = user_endpoint_config
+
+  if (Object.keys(resource_specification).length !== 0) {
+    body['resource_specification'] = resource_specification
   }
 
   const content_len = JSON.stringify(body).length

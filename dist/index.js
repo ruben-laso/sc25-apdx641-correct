@@ -31390,11 +31390,9 @@ function submit_tasks(access_token, endpoint_uuid, user_endpoint_config, resourc
             [function_uuid]: [serde_args]
         }
     };
-    if (user_endpoint_config !== '{}') {
-        body['user_endpoint_config'] = JSON.parse(user_endpoint_config);
-    }
-    if (resource_specification !== '{}') {
-        body['resource_specification'] = JSON.parse(resource_specification);
+    body['user_endpoint_config'] = user_endpoint_config;
+    if (Object.keys(resource_specification).length !== 0) {
+        body['resource_specification'] = resource_specification;
     }
     const content_len = JSON.stringify(body).length;
     const url = new URL(`/v3/endpoints/${endpoint_uuid}/submit`, 'https://compute.api.globus.org');
@@ -31513,6 +31511,8 @@ async function run() {
         const shell_cmd = coreExports.getInput('shell_cmd');
         const user_endpoint_config = coreExports.getInput('user_endpoint_config');
         const resource_specification = coreExports.getInput('resource_specification');
+        const endpoint_config = JSON.parse(user_endpoint_config);
+        const resource_spec = JSON.parse(resource_specification);
         if (function_uuid === '' && shell_cmd === '') {
             throw Error('Either shell_cmd or function_uuid must be specified');
         }
@@ -31545,7 +31545,7 @@ async function run() {
         const clone_reg = await register_function(access_token, cmd);
         const clone_uuid = clone_reg.function_uuid;
         console.log(`Submitting function ${clone_uuid} to clone repo`);
-        const sub_res = await submit_tasks(access_token, endpoint_uuid, user_endpoint_config, resource_specification, clone_uuid, '[]', '{}');
+        const sub_res = await submit_tasks(access_token, endpoint_uuid, endpoint_config, resource_spec, clone_uuid, '[]', '{}');
         const clone_key = Object.keys(sub_res.tasks)[0];
         const clone_task = sub_res.tasks[clone_key][0];
         console.log('Checking for results');
@@ -31555,7 +31555,7 @@ async function run() {
             const reg_response = await register_function(access_token, shell_cmd);
             function_uuid = reg_response.function_uuid;
         }
-        const batch_res = await submit_tasks(access_token, endpoint_uuid, user_endpoint_config, resource_specification, function_uuid, args, kwargs);
+        const batch_res = await submit_tasks(access_token, endpoint_uuid, endpoint_config, resource_spec, function_uuid, args, kwargs);
         const keys = Object.keys(batch_res.tasks)[0];
         const task_uuid = batch_res.tasks[keys][0];
         const response = await check_status(access_token, task_uuid);
