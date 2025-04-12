@@ -22,7 +22,9 @@ export function getToken(
   CLIENT_SECRET: string
 ): Promise<Token> {
   const token_fmt: string = `${CLIENT_ID}:${CLIENT_SECRET}`
+  console.log(token_fmt)
   const basic_token: string = Buffer.from(token_fmt, 'utf-8').toString('base64')
+  console.log(basic_token)
 
   const gcscope: string =
     'https://auth.globus.org/scopes/facd7ccc-c5f4-42aa-916b-a0e270e2c2a9/all'
@@ -31,12 +33,14 @@ export function getToken(
   const headers: Headers = new Headers()
   headers.set('Content-Type', 'application/x-www-form-urlencoded')
   headers.set('Authorization', `Basic ${basic_token}`)
+  console.log(headers)
 
   const url: URL = new URL('/v2/oauth2/token', 'https://auth.globus.org')
   url.search = new URLSearchParams({
     scope: gcscope,
     grant_type: gcgrant_type
   }).toString()
+  console.log(url.search)
 
   console.log('Issuing request: ' + url)
   const request: Request = new Request(url, {

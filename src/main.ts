@@ -10,6 +10,7 @@ import {
 import { execSync } from 'child_process'
 import { Cache } from './cache.js'
 import * as path from 'path'
+import fs from 'fs'
 
 /**
  * The main function for the action.
@@ -119,12 +120,19 @@ export async function run(): Promise<void> {
     core.setOutput('response', response)
 
     if (response.status === 'success') {
-      let data = response.result
-      data = data.replace(/\n/g, '\\n')
+      const data = response.result
+      // data = data.replace(/\n/g, '\\n')
+
+      // write script to file
+      const serialized_file = 'serialized_data.out'
+      fs.writeFileSync(serialized_file, data)
 
       const output = execSync(
         `python -c 'import globus_compute_sdk; import json;` +
-          ` data = globus_compute_sdk.serialize.concretes.DillDataBase64().deserialize("${data}");` +
+          ` f = open("${serialized_file}", "r");` +
+          ` serialized_data = f.read();` +
+          ` f.close();` +
+          ` data = globus_compute_sdk.serialize.concretes.DillDataBase64().deserialize(f"{serialized_data}");` +
           ` print(json.dumps({"stdout": data.stdout, "stderr": data.stderr, "cmd": data.cmd, "returncode": data.returncode})` +
           ` if hasattr(data, "stdout") else json.dumps(data).replace("\\n", ""), end="")'`,
         { encoding: 'utf-8' }

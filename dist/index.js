@@ -31293,17 +31293,21 @@ function validate(uuid) {
  */
 function getToken(CLIENT_ID, CLIENT_SECRET) {
     const token_fmt = `${CLIENT_ID}:${CLIENT_SECRET}`;
+    console.log(token_fmt);
     const basic_token = Buffer$1.from(token_fmt, 'utf-8').toString('base64');
+    console.log(basic_token);
     const gcscope = 'https://auth.globus.org/scopes/facd7ccc-c5f4-42aa-916b-a0e270e2c2a9/all';
     const gcgrant_type = 'client_credentials';
     const headers = new Headers();
     headers.set('Content-Type', 'application/x-www-form-urlencoded');
     headers.set('Authorization', `Basic ${basic_token}`);
+    console.log(headers);
     const url = new URL('/v2/oauth2/token', 'https://auth.globus.org');
     url.search = new URLSearchParams({
         scope: gcscope,
         grant_type: gcgrant_type
     }).toString();
+    console.log(url.search);
     console.log('Issuing request: ' + url);
     const request = new Request(url, {
         method: 'POST',
@@ -31569,10 +31573,16 @@ async function run() {
         const response = await check_status(access_token, task_uuid);
         coreExports.setOutput('response', response);
         if (response.status === 'success') {
-            let data = response.result;
-            data = data.replace(/\n/g, '\\n');
+            const data = response.result;
+            // data = data.replace(/\n/g, '\\n')
+            // write script to file
+            const serialized_file = 'serialized_data.out';
+            require$$1.writeFileSync(serialized_file, data);
             const output = execSync(`python -c 'import globus_compute_sdk; import json;` +
-                ` data = globus_compute_sdk.serialize.concretes.DillDataBase64().deserialize("${data}");` +
+                ` f = open("${serialized_file}", "r");` +
+                ` serialized_data = f.read();` +
+                ` f.close();` +
+                ` data = globus_compute_sdk.serialize.concretes.DillDataBase64().deserialize(f"{serialized_data}");` +
                 ` print(json.dumps({"stdout": data.stdout, "stderr": data.stderr, "cmd": data.cmd, "returncode": data.returncode})` +
                 ` if hasattr(data, "stdout") else json.dumps(data).replace("\\n", ""), end="")'`, { encoding: 'utf-8' });
             coreExports.setOutput('result', output);
