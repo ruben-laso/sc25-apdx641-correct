@@ -176,7 +176,11 @@ describe('main.ts', () => {
   })
 
   it('Check that error is raised in case of nonzero returncode', async () => {
-    const result = JSON.stringify({ stdout: 'stdout', returncode: 2 })
+    const result = JSON.stringify({
+      stdout: 'stdout',
+      stderr: 'error',
+      returncode: 2
+    })
     cp.execSync.mockReset()
     cp.execSync.mockReturnValue(result)
     await run()

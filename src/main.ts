@@ -103,6 +103,9 @@ export async function run(): Promise<void> {
       function_uuid = reg_response.function_uuid
     }
 
+    const output_stdout: string = `${function_uuid}:action-output.stdout`
+    const output_stderr: string = `${function_uuid}:action-output.stderr`
+
     const batch_res = await submit_tasks(
       access_token,
       endpoint_uuid,
@@ -117,11 +120,12 @@ export async function run(): Promise<void> {
     const task_uuid: string = batch_res.tasks[keys as keyof object][0]
     const response = await check_status(access_token, task_uuid)
 
+    core.setOutput('stdout', output_stdout)
+    core.setOutput('stderr', output_stderr)
     core.setOutput('response', response)
 
     if (response.status === 'success') {
       const data = response.result
-      // data = data.replace(/\n/g, '\\n')
 
       // write script to file
       const serialized_file = 'serialized_data.out'
@@ -144,11 +148,17 @@ export async function run(): Promise<void> {
 
       if ('stdout' in output_json) {
         if ('returncode' in output_json && output_json['returncode'] != 0) {
+          fs.writeFileSync(output_stderr, output_json['stdout'])
+          fs.writeFileSync(output_stderr, output_json['stderr'])
           throw Error(output_json['stdout'])
         }
         console.log(output_json['stdout'])
+        fs.writeFileSync(output_stdout, output_json['stdout'])
+        fs.writeFileSync(output_stderr, output_json['stderr'])
       } else {
         console.log(output_json)
+        fs.writeFileSync(output_stdout, '\n')
+        fs.writeFileSync(output_stderr, output_json)
       }
       // json.dumps({"stdout": data.stdout.replace('\\\\n', '\\n'), "stderr": data.stderr, "cmd": data.cmd, "returncode": data.returncode}`
     } else {
