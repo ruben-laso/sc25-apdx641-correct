@@ -137,7 +137,7 @@ export async function run(): Promise<void> {
           ` serialized_data = f.read();` +
           ` f.close();` +
           ` data = globus_compute_sdk.serialize.concretes.DillDataBase64().deserialize(f"{serialized_data}");` +
-          ` print(json.dumps({"stdout": data.stdout, "stderr": data.stderr if data.stderr else '' , "cmd": data.cmd, "returncode": data.returncode})` +
+          ` print(json.dumps({"stdout": data.stdout, "stderr": data.stderr if data.stderr else "" , "cmd": data.cmd, "returncode": data.returncode})` +
           ` if hasattr(data, "stdout") else json.dumps(data).replace("\\n", ""), end="")'`,
         { encoding: 'utf-8' }
       )
