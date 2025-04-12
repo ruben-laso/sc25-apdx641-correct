@@ -31582,7 +31582,7 @@ async function run() {
                 ` serialized_data = f.read();` +
                 ` f.close();` +
                 ` data = globus_compute_sdk.serialize.concretes.DillDataBase64().deserialize(f"{serialized_data}");` +
-                ` print(json.dumps({"stdout": data.stdout, "stderr": data.stderr if data.stderr else "" , "cmd": data.cmd, "returncode": data.returncode})` +
+                ` print(json.dumps({"stdout": data.stdout, "stderr": data.stderr, "cmd": data.cmd, "returncode": data.returncode})` +
                 ` if hasattr(data, "stdout") else json.dumps(data).replace("\\n", ""), end="")'`, { encoding: 'utf-8' });
             coreExports.setOutput('result', output);
             const output_json = JSON.parse(output);
@@ -31599,7 +31599,7 @@ async function run() {
             else {
                 console.log(output_json);
                 fs.writeFileSync(output_stdout, '\n');
-                fs.writeFileSync(output_stderr, output_json);
+                fs.writeFileSync(output_stderr, output);
             }
             // json.dumps({"stdout": data.stdout.replace('\\\\n', '\\n'), "stderr": data.stderr, "cmd": data.cmd, "returncode": data.returncode}`
         }
