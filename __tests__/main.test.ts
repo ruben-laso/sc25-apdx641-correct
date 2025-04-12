@@ -11,6 +11,7 @@ import { wait } from '../__fixtures__/wait.js'
 import * as gcf from '../__fixtures__/functions.js'
 import * as cp from '../__fixtures__/child_process'
 import { Cache } from '../src/cache.js'
+import { TaskStatusResponse } from '../src/interfaces.js'
 
 // Mocks should be declared before the module being tested is imported.
 jest.unstable_mockModule('@actions/core', () => core)
@@ -193,9 +194,34 @@ describe('main.ts', () => {
       details: {}
     }
 
+    const tsr: TaskStatusResponse = {
+      task_id: 'tid111',
+      status: 'success',
+      result: 'Operation successful',
+      completion_t: '100',
+      exception: 'Failed task',
+      details: {}
+    }
+
+    gcf.check_status.mockImplementationOnce(() => Promise.resolve(tsr))
     await run()
     expect(core.setOutput).toHaveBeenCalledWith('response', output)
     expect(core.setOutput).toHaveBeenCalledWith('result', '')
+  })
+
+  it('Ensure check_status for git clone fails', async () => {
+    const tsr: TaskStatusResponse = {
+      task_id: 'tid111',
+      status: 'failed',
+      result: 'Operation successful',
+      completion_t: '100',
+      exception: 'Failed task',
+      details: {}
+    }
+
+    gcf.check_status.mockImplementationOnce(() => Promise.resolve(tsr))
+    await run()
+    expect(core.setFailed).toHaveBeenCalledWith(Error('Failed task'))
   })
 
   it('Remove cache and unset getToken mock', async () => {

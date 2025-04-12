@@ -16,6 +16,14 @@ inputs:
       endpoint administrators
     required: false
     default: '{}'
+  clone_endpoint_config:
+    description:
+      Configuration values for endpoint that are described and allowed by
+      endpoint administrators. This config is only used for the cloning of the
+      repo. If no value is provided, it will default to using the
+      user_endpoint_config
+    required: false
+    default: '{}'
   resource_specification:
     description: Resource requirements for individual task execution
     required: false

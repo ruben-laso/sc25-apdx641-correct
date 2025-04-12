@@ -11,7 +11,7 @@ export async function exponential_decay(): Promise<string> {
   let delay = 0
 
   if (runtime < 5000) {
-    // less that 5s
+    // less than 5s
     delay = 5000
   } else if (runtime < 60000) {
     // less than 1m

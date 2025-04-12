@@ -31256,7 +31256,7 @@ async function exponential_decay() {
     const runtime = Date.now() - START_TIME;
     let delay = 0;
     if (runtime < 5000) {
-        // less that 5s
+        // less than 5s
         delay = 5000;
     }
     else if (runtime < 60000) {
@@ -31509,8 +31509,13 @@ async function run() {
         const endpoint_uuid = coreExports.getInput('endpoint_uuid');
         let function_uuid = coreExports.getInput('function_uuid');
         const shell_cmd = coreExports.getInput('shell_cmd');
+        let clone_endpoint_config = coreExports.getInput('clone_endpoint_config');
         const user_endpoint_config = coreExports.getInput('user_endpoint_config');
         const resource_specification = coreExports.getInput('resource_specification');
+        if (clone_endpoint_config === '') {
+            clone_endpoint_config = user_endpoint_config;
+        }
+        const clone_conf = JSON.parse(clone_endpoint_config);
         const endpoint_config = JSON.parse(user_endpoint_config);
         const resource_spec = JSON.parse(resource_specification);
         if (function_uuid === '' && shell_cmd === '') {
@@ -31537,19 +31542,22 @@ async function run() {
         const branch = githubExports.context.ref;
         const repo = githubExports.context.repo;
         const tmp_workdir = 'gc-action-temp';
-        const tmp_repodir = `${tmp_workdir}/${repo.repo}`;
+        // const tmp_repodir = `${tmp_workdir}/${repo.repo}`
         const url = `${githubExports.context.serverUrl}/${repo.owner}/${repo.repo}`;
         console.log(`Cloning repo ${url}`);
-        const cmd = `mkdir ${tmp_workdir}; cd ${tmp_repodir}; git clone ${url}; git checkout ${branch}`;
+        const cmd = `if [ -d ${tmp_workdir} ]; then rm -r ${tmp_workdir}; fi && mkdir ${tmp_workdir} && cd ${tmp_workdir} && git clone ${url} && cd ${repo.repo} && git checkout ${branch}`;
         console.log('Registering function');
         const clone_reg = await register_function(access_token, cmd);
         const clone_uuid = clone_reg.function_uuid;
         console.log(`Submitting function ${clone_uuid} to clone repo`);
-        const sub_res = await submit_tasks(access_token, endpoint_uuid, endpoint_config, resource_spec, clone_uuid, '[]', '{}');
+        const sub_res = await submit_tasks(access_token, endpoint_uuid, clone_conf, resource_spec, clone_uuid, '[]', '{}');
         const clone_key = Object.keys(sub_res.tasks)[0];
         const clone_task = sub_res.tasks[clone_key][0];
         console.log('Checking for results');
-        await check_status(access_token, clone_task);
+        const clone_res = await check_status(access_token, clone_task);
+        if (clone_res.status !== 'success') {
+            throw Error(clone_res.exception);
+        }
         //const cmd = `mkdir gc-action-temp; cd gc-action-temp; git clone ${}`
         if (shell_cmd.length !== 0) {
             const reg_response = await register_function(access_token, shell_cmd);

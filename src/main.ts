@@ -23,10 +23,16 @@ export async function run(): Promise<void> {
     const endpoint_uuid: string = core.getInput('endpoint_uuid')
     let function_uuid: string = core.getInput('function_uuid')
     const shell_cmd: string = core.getInput('shell_cmd')
+    let clone_endpoint_config: string = core.getInput('clone_endpoint_config')
     const user_endpoint_config: string = core.getInput('user_endpoint_config')
     const resource_specification: string = core.getInput(
       'resource_specification'
     )
+
+    if (clone_endpoint_config === '') {
+      clone_endpoint_config = user_endpoint_config
+    }
+    const clone_conf = JSON.parse(clone_endpoint_config)
     const endpoint_config = JSON.parse(user_endpoint_config)
     const resource_spec = JSON.parse(resource_specification)
 
@@ -61,11 +67,11 @@ export async function run(): Promise<void> {
     const branch = github.context.ref
     const repo = github.context.repo
     const tmp_workdir = 'gc-action-temp'
-    const tmp_repodir = `${tmp_workdir}/${repo.repo}`
+    // const tmp_repodir = `${tmp_workdir}/${repo.repo}`
 
     const url = `${github.context.serverUrl}/${repo.owner}/${repo.repo}`
     console.log(`Cloning repo ${url}`)
-    const cmd = `mkdir ${tmp_workdir}; cd ${tmp_repodir}; git clone ${url}; git checkout ${branch}`
+    const cmd = `if [ -d ${tmp_workdir} ]; then rm -r ${tmp_workdir}; fi && mkdir ${tmp_workdir} && cd ${tmp_workdir} && git clone ${url} && cd ${repo.repo} && git checkout ${branch}`
     console.log('Registering function')
     const clone_reg = await register_function(access_token, cmd)
     const clone_uuid = clone_reg.function_uuid
@@ -74,7 +80,7 @@ export async function run(): Promise<void> {
     const sub_res = await submit_tasks(
       access_token,
       endpoint_uuid,
-      endpoint_config,
+      clone_conf,
       resource_spec,
       clone_uuid,
       '[]',
@@ -84,7 +90,10 @@ export async function run(): Promise<void> {
     const clone_key: string = Object.keys(sub_res.tasks)[0]
     const clone_task: string = sub_res.tasks[clone_key as keyof object][0]
     console.log('Checking for results')
-    await check_status(access_token, clone_task)
+    const clone_res = await check_status(access_token, clone_task)
+    if (clone_res.status !== 'success') {
+      throw Error(clone_res.exception)
+    }
 
     //const cmd = `mkdir gc-action-temp; cd gc-action-temp; git clone ${}`
 
