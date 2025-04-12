@@ -185,7 +185,7 @@ describe('main.ts', () => {
     cp.execSync.mockReturnValue(result)
     await run()
 
-    expect(core.setFailed).toHaveBeenCalledWith(Error('stdout'))
+    expect(core.setFailed).toHaveBeenCalledWith(Error(result))
   })
 
   it("Check that output result isn't deserialized when task fails", async () => {

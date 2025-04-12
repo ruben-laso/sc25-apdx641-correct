@@ -31563,8 +31563,8 @@ async function run() {
             const reg_response = await register_function(access_token, shell_cmd);
             function_uuid = reg_response.function_uuid;
         }
-        const output_stdout = `${function_uuid}:action-output.stdout`;
-        const output_stderr = `${function_uuid}:action-output.stderr`;
+        const output_stdout = `${function_uuid}-action_output.stdout`;
+        const output_stderr = `${function_uuid}-action_output.stderr`;
         const batch_res = await submit_tasks(access_token, endpoint_uuid, endpoint_config, resource_spec, function_uuid, args, kwargs);
         const keys = Object.keys(batch_res.tasks)[0];
         const task_uuid = batch_res.tasks[keys][0];
@@ -31590,7 +31590,7 @@ async function run() {
                 if ('returncode' in output_json && output_json['returncode'] != 0) {
                     fs.writeFileSync(output_stderr, output_json['stdout']);
                     fs.writeFileSync(output_stderr, output_json['stderr']);
-                    throw Error(output_json['stdout']);
+                    throw Error(output);
                 }
                 console.log(output_json['stdout']);
                 fs.writeFileSync(output_stdout, output_json['stdout']);
