@@ -28,7 +28,7 @@ const cache = new Cache('./tmp')
 let output = {
   task_id: 't1',
   status: 'success',
-  result: 'res',
+  result: '{"stdout": "res", "stderr": "stderr" }',
   completion_t: '1',
   exception: 'ex',
   details: {}
@@ -160,14 +160,14 @@ describe('main.ts', () => {
   })
 
   it('Add coverage for JSON output types', async () => {
-    let result = JSON.stringify({ stdout: 'stdout' })
+    let result = JSON.stringify({ stdout: 'stdout', stderr: 'stderr' })
     cp.execSync.mockReset()
     cp.execSync.mockReturnValue(result)
     await run()
     expect(core.setOutput).toHaveBeenCalledWith('response', output)
     expect(core.setOutput).toHaveBeenCalledWith('result', result)
 
-    result = JSON.stringify({ stderr: 'stderr' })
+    result = JSON.stringify({ stdout: 'stdout', stderr: 'stderr' })
     cp.execSync.mockReset()
     cp.execSync.mockReturnValue(result)
     await run()
