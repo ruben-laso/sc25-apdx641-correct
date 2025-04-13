@@ -92,6 +92,7 @@ export async function run(): Promise<void> {
     const clone_task: string = sub_res.tasks[clone_key as keyof object][0]
     console.log('Checking for results')
     const clone_res = await check_status(access_token, clone_task)
+    console.log(clone_res)
     if (clone_res.status !== 'success') {
       throw Error(clone_res.exception)
     }
@@ -148,7 +149,7 @@ export async function run(): Promise<void> {
 
       if ('stdout' in output_json) {
         if ('returncode' in output_json && output_json['returncode'] != 0) {
-          fs.writeFileSync(output_stderr, output_json['stdout'])
+          fs.writeFileSync(output_stdout, output_json['stdout'])
           fs.writeFileSync(output_stderr, output_json['stderr'])
           throw Error(output)
         }
