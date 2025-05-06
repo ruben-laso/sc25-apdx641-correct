@@ -1,9 +1,9 @@
-# Globus Compute GitHub Action
+# CORRECT
 
-[![GitHub Super-Linter](https://github.com/ValHayot/globus-compute-github-action/actions/workflows/linter.yml/badge.svg)](https://github.com/ValHayot/globus-compute-github-action/actions/workflows/linter.yml)
-[![CI](https://github.com/ValHayot/globus-compute-github-action/actions/workflows/ci.yml/badge.svg)](https://github.com/ValHayot/globus-compute-github-action/actions/workflows/ci.yml)
-[![Check dist/](https://github.com/ValHayot/globus-compute-github-action/actions/workflows/check-dist.yml/badge.svg)](https://github.com/ValHayot/globus-compute-github-action/actions/workflows/check-dist.yml)
-[![CodeQL](https://github.com/ValHayot/globus-compute-github-action/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/ValHayot/globus-compute-github-action/actions/workflows/codeql-analysis.yml)
+[![GitHub Super-Linter](https://github.com/globus-labs/correct/actions/workflows/linter.yml/badge.svg)](https://github.com/globus-labs/correct/actions/workflows/linter.yml)
+[![CI](https://github.com/globus-labs/correct/actions/workflows/ci.yml/badge.svg)](https://github.com/globus-labs/correct/actions/workflows/ci.yml)
+[![Check dist/](https://github.com/globus-labs/correct/actions/workflows/check-dist.yml/badge.svg)](https://github.com/globus-labs/correct/actions/workflows/check-dist.yml)
+[![CodeQL](https://github.com/globus-labs/correct/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/globus-labs/correct/actions/workflows/codeql-analysis.yml)
 [![Coverage](./badges/coverage.svg)](./badges/coverage.svg)
 
 > [!WARNING]
@@ -12,8 +12,8 @@
 
 ## Introduction
 
-This action aims to allow users to execute their jobs (and by extension, CI
-flows) on
+This COntinuous Reproducibility with a Remote Execution Tool (CORRECT) action
+aims to allow users to execute their jobs (and by extension, CI flows) on
 [Globus Compute](https://globus-compute.readthedocs.io/en/stable/sdk.html)
 Endpoints within their GitHub Action workflows.
 
