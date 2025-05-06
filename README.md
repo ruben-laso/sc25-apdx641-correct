@@ -29,6 +29,7 @@ configured to use a `GLOBUS_COMPUTE_CLIENT_ID` and
 Using the action in a workflow can be done by adding the following step.
 
 With a pre-registered function
+
 ```yaml
 - name: Run task on Globus Compute Endpoint
   id: gc-action
@@ -43,6 +44,7 @@ With a pre-registered function
 ```
 
 With a shell command
+
 ```yaml
 - name: Run task on Globus Compute Endpoint
   id: gc-action
@@ -79,8 +81,6 @@ With a shell command
     endpoint_uuid: 'f8e95115-0d66-41fe-88d8-ecf8c3bf59fd'
     shell_cmd: 'pytest'
 ```
-
-
 
 ### Obtaining task execution outputs
 
