@@ -1,5 +1,6 @@
-name: 'Globus Compute Action'
-description: 'Execute function on endpoint with provided task inputs.'
+name: 'CORRECT Action'
+description: 'Continuous reproducibility through remote execution'
+color: 'purple'
 inputs:
   client_id:
     description: Globus Client ID to use
