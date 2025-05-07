@@ -1,6 +1,5 @@
-name: 'CORRECT Action'
-description: 'Continuous reproducibility through remote execution'
-color: 'purple'
+name: 'CORRECT'
+description: 'Execute function on a Globus Compute Endpoint.'
 inputs:
   client_id:
     description: Globus Client ID to use
@@ -56,3 +55,6 @@ outputs:
 runs:
   using: 'node20'
   main: 'dist/index.js'
+branding:
+  icon: 'check-circle'
+  color: 'purple'
