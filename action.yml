@@ -1,4 +1,4 @@
-name: 'CORRECT'
+name: 'CORRECT action'
 description: 'Execute function on a Globus Compute Endpoint.'
 inputs:
   client_id:
