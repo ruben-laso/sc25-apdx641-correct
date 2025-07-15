@@ -31556,9 +31556,30 @@ async function run() {
         const clone_task = sub_res.tasks[clone_key][0];
         console.log('Checking for results');
         const clone_res = await check_status(access_token, clone_task);
-        console.log(clone_res);
         if (clone_res.status !== 'success') {
+            console.log(clone_res);
             throw Error(clone_res.exception);
+        }
+        else {
+            // write output to file and deserialize
+            const serialized_out = 'serialized_clone.out';
+            fs.writeFileSync(serialized_out, clone_res.result);
+            const clone_output = execSync(`python -c 'import globus_compute_sdk; import json;` +
+                ` f = open("${serialized_out}", "r");` +
+                ` serialized_data = f.read();` +
+                ` f.close();` +
+                ` data = globus_compute_sdk.serialize.concretes.DillDataBase64().deserialize(f"{serialized_data}");` +
+                ` print(json.dumps({"stdout": data.stdout, "stderr": data.stderr, "cmd": data.cmd, "returncode": data.returncode})` +
+                ` if hasattr(data, "stdout") else json.dumps(data).replace("\\n", ""), end="")'`, { encoding: 'utf-8' });
+            try {
+                const clone_json = JSON.parse(clone_output);
+                console.log(clone_json.stdout);
+                console.error(clone_json.stderr);
+            }
+            catch (e) {
+                console.error(e);
+                console.log(clone_output);
+            }
         }
         //const cmd = `mkdir gc-action-temp; cd gc-action-temp; git clone ${}`
         if (shell_cmd.length !== 0) {
@@ -31599,11 +31620,10 @@ async function run() {
                 fs.writeFileSync(output_stderr, output_json['stderr']);
             }
             else {
-                console.log(output_json);
+                console.error(output_json['stderr']);
                 fs.writeFileSync(output_stdout, '\n');
                 fs.writeFileSync(output_stderr, output);
             }
-            // json.dumps({"stdout": data.stdout.replace('\\\\n', '\\n'), "stderr": data.stderr, "cmd": data.cmd, "returncode": data.returncode}`
         }
         else {
             coreExports.setOutput('result', '');

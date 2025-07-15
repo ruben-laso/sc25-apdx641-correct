@@ -92,9 +92,33 @@ export async function run(): Promise<void> {
     const clone_task: string = sub_res.tasks[clone_key as keyof object][0]
     console.log('Checking for results')
     const clone_res = await check_status(access_token, clone_task)
-    console.log(clone_res)
     if (clone_res.status !== 'success') {
+      console.log(clone_res)
       throw Error(clone_res.exception)
+    } else {
+      // write output to file and deserialize
+      const serialized_out = 'serialized_clone.out'
+      fs.writeFileSync(serialized_out, clone_res.result)
+
+      const clone_output = execSync(
+        `python -c 'import globus_compute_sdk; import json;` +
+          ` f = open("${serialized_out}", "r");` +
+          ` serialized_data = f.read();` +
+          ` f.close();` +
+          ` data = globus_compute_sdk.serialize.concretes.DillDataBase64().deserialize(f"{serialized_data}");` +
+          ` print(json.dumps({"stdout": data.stdout, "stderr": data.stderr, "cmd": data.cmd, "returncode": data.returncode})` +
+          ` if hasattr(data, "stdout") else json.dumps(data).replace("\\n", ""), end="")'`,
+        { encoding: 'utf-8' }
+      )
+
+      try {
+        const clone_json = JSON.parse(clone_output)
+        console.log(clone_json.stdout)
+        console.error(clone_json.stderr)
+      } catch (e) {
+        console.error(e)
+        console.log(clone_output)
+      }
     }
 
     //const cmd = `mkdir gc-action-temp; cd gc-action-temp; git clone ${}`
@@ -151,17 +175,16 @@ export async function run(): Promise<void> {
         if ('returncode' in output_json && output_json['returncode'] != 0) {
           fs.writeFileSync(output_stdout, output_json['stdout'])
           fs.writeFileSync(output_stderr, output_json['stderr'])
-          throw Error(output)
+          throw Error(output_json['stdout'] + '\n' + output_json['stderr'])
         }
         console.log(output_json['stdout'])
         fs.writeFileSync(output_stdout, output_json['stdout'])
         fs.writeFileSync(output_stderr, output_json['stderr'])
       } else {
-        console.log(output_json)
+        console.error(output_json)
         fs.writeFileSync(output_stdout, '\n')
         fs.writeFileSync(output_stderr, output)
       }
-      // json.dumps({"stdout": data.stdout.replace('\\\\n', '\\n'), "stderr": data.stderr, "cmd": data.cmd, "returncode": data.returncode}`
     } else {
       core.setOutput('result', '')
     }

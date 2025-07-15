@@ -134,6 +134,7 @@ describe('main.ts', () => {
       serde_identifier: '10'
     })
     cp.execSync.mockReturnValueOnce(reg_result)
+    cp.execSync.mockReturnValueOnce(reg_result) // execSync called twice
     core.getInput.mockReset()
     core.getInput.mockImplementation(function (name: string): string {
       if (name === 'client_id') {
