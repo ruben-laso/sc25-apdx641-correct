@@ -31613,14 +31613,14 @@ async function run() {
                 if ('returncode' in output_json && output_json['returncode'] != 0) {
                     fs.writeFileSync(output_stdout, output_json['stdout']);
                     fs.writeFileSync(output_stderr, output_json['stderr']);
-                    throw Error(output);
+                    throw Error(output_json['stdout'] + '\n' + output_json['stderr']);
                 }
                 console.log(output_json['stdout']);
                 fs.writeFileSync(output_stdout, output_json['stdout']);
                 fs.writeFileSync(output_stderr, output_json['stderr']);
             }
             else {
-                console.error(output_json['stderr']);
+                console.error(output_json);
                 fs.writeFileSync(output_stdout, '\n');
                 fs.writeFileSync(output_stderr, output);
             }

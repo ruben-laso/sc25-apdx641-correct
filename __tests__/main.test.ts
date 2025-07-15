@@ -177,16 +177,19 @@ describe('main.ts', () => {
   })
 
   it('Check that error is raised in case of nonzero returncode', async () => {
-    const result = JSON.stringify({
+    const result_dict = {
       stdout: 'stdout',
-      stderr: 'error',
+      stderr: 'stderr',
       returncode: 2
-    })
+    }
+    const result = JSON.stringify(result_dict)
     cp.execSync.mockReset()
     cp.execSync.mockReturnValue(result)
     await run()
 
-    expect(core.setFailed).toHaveBeenCalledWith(Error(result))
+    expect(core.setFailed).toHaveBeenCalledWith(
+      Error(result_dict['stdout'] + '\n' + result_dict['stderr'])
+    )
   })
 
   it("Check that output result isn't deserialized when task fails", async () => {
