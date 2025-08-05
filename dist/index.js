@@ -31510,6 +31510,9 @@ async function run() {
         let clone_endpoint_config = coreExports.getInput('clone_endpoint_config');
         const user_endpoint_config = coreExports.getInput('user_endpoint_config');
         const resource_specification = coreExports.getInput('resource_specification');
+        if (CLIENT_ID === '' || CLIENT_SECRET === '') {
+            throw Error('CLIENT_ID or CLIENT_SECRET has not been specified');
+        }
         if (clone_endpoint_config === '') {
             clone_endpoint_config = user_endpoint_config;
         }

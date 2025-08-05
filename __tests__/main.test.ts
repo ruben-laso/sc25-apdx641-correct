@@ -102,12 +102,38 @@ describe('main.ts', () => {
     expect(core.setOutput).toHaveBeenCalledWith('result', output.result)
   })
 
+  it('Test missing client_id and client_secret', async () => {
+    core.getInput.mockReset()
+    core.getInput.mockImplementation(function (name: string): string {
+      if (name === 'client_secret') {
+        return '2'
+      } else if (name === 'endpoint_uuid') {
+        return '3'
+      } else if (name === 'function_uuid') {
+        return '4'
+      } else if (name === 'args') {
+        return '[]'
+      } else if (name === 'kwargs' || name === 'user_endpoint_config') {
+        return '{}'
+      } else if (name === 'resource_specification') {
+        return '{ "num_nodes": 1 }'
+      } else {
+        return ''
+      }
+    })
+
+    await run()
+    expect(core.setFailed).toHaveBeenCalledWith(
+      Error('CLIENT_ID or CLIENT_SECRET has not been specified')
+    )
+  })
+
   it('Validate that main function fails when adequate inputs are not provided', async () => {
     core.getInput.mockReset()
     core.getInput.mockImplementation(function (name: string): string {
-      if (name === 'client-id') {
+      if (name === 'client_id') {
         return '1'
-      } else if (name === 'client-secret') {
+      } else if (name === 'client_secret') {
         return '2'
       } else if (name === 'endpoint-uuid') {
         return '3'
