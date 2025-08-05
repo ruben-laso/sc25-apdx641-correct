@@ -157,14 +157,12 @@ export function submit_tasks(
   }
 
   const content_len = JSON.stringify(body).length
+  headers.set('content-length', content_len.toString())
+
   const url: URL = new URL(
     `/v3/endpoints/${endpoint_uuid}/submit`,
     'https://compute.api.globus.org'
   )
-  url.search = new URLSearchParams({
-    endpoint_uuid: endpoint_uuid,
-    'content-length': content_len.toString()
-  }).toString()
 
   console.log('Issuing request: ' + url)
   const request: Request = new Request(url, {
