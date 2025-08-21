@@ -63,7 +63,7 @@ jobs:
         with:
           client_id: ${{ secrets.GLOBUS_COMPUTE_CLIENT_ID }}
           client_secret: ${{ secrets.GLOBUS_COMPUTE_CLIENT_SECRET }}
-          endpoint_uuid: 'a80c4a1e-7464-48aa-8c2f-73532b9c9e2c'
+          endpoint_uuid: 'dfa60f2a-4f37-4724-b26f-a4b878d9fd6f'
           function_uuid: 'd0031aba-5f41-4cc4-9d12-cb980ef10cd5'
           args: '[]'
           kwargs: '{"inpt": "test"}'
